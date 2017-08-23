@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sxsram.ssm.mapper.RechargeAndWithdrawMapper">
+	<resultMap type="com.sxsram.ssm.entity.RechargeAndWithDrawRecordExpand" id="map_record" autoMapping="true">
+		<id column="id" property="id"/>
+		<association property="user" javaType="com.sxsram.ssm.entity.UserExpand" autoMapping="true">
+			<id column="userId" property="id"/>
+			<!-- <result column="username" property="username"/>
+			<result column="userPhone" property="phone"/> -->
+		</association>
+	</resultMap>
+
+ 	<select id="querySingleRechargeAndWithdrawRecord" parameterType="com.sxsram.ssm.entity.RechargeAndWithDrawRecordQueryVo"
+		resultMap="map_record">
+		 select 
+		 	r.*,u.username,u.phone 
+		 from 
+		 	t_recharge_withdraw_record r join t_user u on r.userId = u.id 
+		 where 1=1
+			<if test="queryCondition != null">
+				<if test="queryCondition.whereCond != null">
+					and ${queryCondition.whereCond}
+				</if>
+			</if>
+			<if test="pagination != null">
+				<if test="pagination.orderByCols != null">
+					order by ${pagination.orderByCols}
+				</if>
+				<if test="pagination.limitStart != null">
+					limit #{pagination.limitStart},#{pagination.limitNum}
+				</if>
+			</if>
+	</select> 
+
+	<select id="queryMultiRechargeAndWithdrawRecords" parameterType="com.sxsram.ssm.entity.RechargeAndWithDrawRecordQueryVo"
+		resultMap="map_record">
+		 select 
+		 	r.*,u.username,u.phone 
+		 from 
+		 	t_recharge_withdraw_record r join t_user u on r.userId = u.id 
+		 where 1=1
+			<if test="queryCondition != null">
+				<if test="queryCondition.whereCond != null">
+					and ${queryCondition.whereCond}
+				</if>
+			</if>
+			<if test="pagination != null">
+				<if test="pagination.orderByCols != null">
+					order by ${pagination.orderByCols}
+				</if>
+				<if test="pagination.limitStart != null">
+					limit #{pagination.limitStart},#{pagination.limitNum}
+				</if>
+			</if>
+	</select>
+</mapper>

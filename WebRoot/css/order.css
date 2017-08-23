@@ -1,0 +1,29 @@
+.div-list{
+	
+}
+
+.div-list-header{
+	font-style: normal;
+	font-weight: bold;
+}
+
+.div-list-content{
+	//margin-top: 10px;
+}
+
+.div-list-content-per{
+	margin-top:15px;
+}
+
+.div-list-content-body{
+	//margin-top:5px;
+}
+
+.div-list-content-body-per{
+	margin-top:20px;
+}
+
+.commodityImg{
+	width:30px;
+	height:30px;
+}

@@ -1,0 +1,1734 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sxsram.ssm.mapper.MemberMapper">
+	<resultMap type="com.sxsram.ssm.entity.UserExpand" id="queryUserRstMap">
+		<id column="id" property="id" />
+		<result column="username" property="username" />
+		<result column="password" property="password" />
+		<result column="province" property="province" />
+		<result column="city" property="city" />
+		<result column="area" property="area" />
+		<result column="phone" property="phone" />
+		<result column="openId" property="openId" />
+		<result column="headImgUrl" property="headImgUrl" />
+		<association property="role" javaType="com.sxsram.ssm.entity.RoleExpand">
+			<id column="roleId" property="id" />
+			<result column="rrolename" property="roleName" />
+			<result column="rrolegrade" property="roleGrade" />
+			<collection property="permissionList"
+				ofType="com.sxsram.ssm.entity.PermissionExpand">
+				<id column="rppermid" property="id" />
+				<result column="pname" property="name" />
+				<association property="operation"
+					javaType="com.sxsram.ssm.entity.OperationExpand">
+					<id column="poperationId" property="id" />
+					<result column="oname" property="name" />
+					<result column="ourl" property="url" />
+					<result column="oimgurl" property="imgUrl" />
+					<result column="oismenu" property="isMenu" />
+					<result column="ostyle" property="style" />
+					<result column="oseqnum" property="seqnum" />
+					<result column="oparentid" property="parentId" />
+				</association>
+			</collection>
+		</association>
+		<association property="certification"
+			javaType="com.sxsram.ssm.entity.Certification">
+			<id column="certificationId" property="id" />
+			<result column="cname" property="name" />
+			<result column="cidcard" property="idcard" />
+		</association>
+	</resultMap>
+
+	<resultMap type="com.sxsram.ssm.entity.UserExpand" id="queryUserRstMap1">
+		<id column="id" property="id" />
+		<result column="username" property="username" />
+		<result column="password" property="password" />
+		<result column="province" property="province" />
+		<result column="city" property="city" />
+		<result column="area" property="area" />
+		<result column="phone" property="phone" />
+		<result column="openId" property="openId" />
+		<result column="headImgUrl" property="headImgUrl" />
+		<result column="incomFlag" property="incomFlag" />
+		<result column="getCashFlag" property="getCashFlag" />
+		<association property="role" javaType="com.sxsram.ssm.entity.RoleExpand">
+			<id column="roleId" property="id" />
+			<result column="rrolename" property="roleName" />
+			<result column="rrolegrade" property="roleGrade" />
+		</association>
+		<association property="proxyUser" javaType="com.sxsram.ssm.entity.UserExpand">
+			<id column="proxy_user_id" property="id" />
+			<result column="pusername" property="username" />
+			<result column="pphone" property="phone" />
+		</association>
+		<association property="certification"
+			javaType="com.sxsram.ssm.entity.Certification">
+			<id column="certificationId" property="id" />
+			<result column="cname" property="name" />
+			<result column="cidcard" property="idcard" />
+		</association>
+		<association property="areaObj" javaType="com.sxsram.ssm.entity.Address">
+			<id column="areaid" property="id" />
+			<result column="areaname" property="name" />
+		</association>
+		<association property="cityObj" javaType="com.sxsram.ssm.entity.Address">
+			<id column="cityid" property="id" />
+			<result column="cityname" property="name" />
+		</association>
+		<association property="provinceObj" javaType="com.sxsram.ssm.entity.Address">
+			<id column="provinceid" property="id" />
+			<result column="provincename" property="name" />
+		</association>
+	</resultMap>
+
+	<resultMap type="com.sxsram.ssm.entity.UserExpand" id="queryUserAccoutRstMap">
+		<id column="id" property="id" />
+		<result column="username" property="username" />
+		<result column="phone" property="phone" />
+		<result column="openId" property="openId" />
+		<association property="jfAccount"
+			javaType="com.sxsram.ssm.entity.AccountExpand">
+			<id column="jfAccountId" property="id" />
+			<result column="jfaccountNo" property="accountNo" />
+			<result column="jfaccountBalance" property="accountBalance" />
+			<result column="jftotalPlatformIncomings" property="totalPlatformIncomings" />
+			<result column="jftotalPlatformOutgoings" property="totalPlatformOutgoings" />
+			<result column="jftotalUserIncomings" property="totalUserIncomings" />
+			<result column="jftotalUserOutgoings" property="totalUserOutgoings" />
+		</association>
+		<association property="dlbAccount"
+			javaType="com.sxsram.ssm.entity.AccountExpand">
+			<id column="dlbAccountId" property="id" />
+			<result column="dlbaccountNo" property="accountNo" />
+			<result column="dlbaccountBalance" property="accountBalance" />
+			<result column="dlbtotalPlatformIncomings" property="totalPlatformIncomings" />
+			<result column="dlbtotalPlatformOutgoings" property="totalPlatformOutgoings" />
+			<result column="dlbtotalUserIncomings" property="totalUserIncomings" />
+			<result column="dlbtotalUserOutgoings" property="totalUserOutgoings" />
+		</association>
+		<association property="moneyAccount"
+			javaType="com.sxsram.ssm.entity.AccountExpand">
+			<id column="moneyAccountId" property="id" />
+			<result column="moneyaccountNo" property="accountNo" />
+			<result column="moneyaccountBalance" property="accountBalance" />
+			<result column="moneytotalPlatformIncomings" property="totalPlatformIncomings" />
+			<result column="moneytotalPlatformOutgoings" property="totalPlatformOutgoings" />
+			<result column="moneytotalUserIncomings" property="totalUserIncomings" />
+			<result column="moneytotalUserOutgoings" property="totalUserOutgoings" />
+		</association>
+		<association property="jdbAccount"
+			javaType="com.sxsram.ssm.entity.AccountExpand">
+			<id column="jdbAccountId" property="id" />
+			<result column="jdbaccountNo" property="accountNo" />
+			<result column="jdbaccountBalance" property="accountBalance" />
+			<result column="jdbtotalPlatformIncomings" property="totalPlatformIncomings" />
+			<result column="jdbtotalPlatformOutgoings" property="totalPlatformOutgoings" />
+			<result column="jdbtotalUserIncomings" property="totalUserIncomings" />
+			<result column="jdbtotalUserOutgoings" property="totalUserOutgoings" />
+		</association>
+		<association property="yljAccount"
+			javaType="com.sxsram.ssm.entity.AccountExpand">
+			<id column="yljAccountId" property="id" />
+			<result column="yljaccountNo" property="accountNo" />
+			<result column="yljaccountBalance" property="accountBalance" />
+			<result column="yljtotalPlatformIncomings" property="totalPlatformIncomings" />
+			<result column="yljtotalPlatformOutgoings" property="totalPlatformOutgoings" />
+			<result column="yljtotalUserIncomings" property="totalUserIncomings" />
+			<result column="yljtotalUserOutgoings" property="totalUserOutgoings" />
+		</association>
+	</resultMap>
+
+	<resultMap type="com.sxsram.ssm.entity.RechargeAndWithDrawRecordExpand"
+		id="queryRwrMap">
+		<id column="id" property="id" />
+		<result column="operateType" property="operateType" />
+		<result column="orderNo" property="orderNo" />
+		<result column="operateNum" property="operateNum" />
+		<result column="operateTime" property="operateTime" />
+		<result column="operateState" property="operateState" />
+		<result column="operateUserIp" property="operateUserIp" />
+		<association property="user" javaType="com.sxsram.ssm.entity.UserExpand">
+			<id column="userId" property="id" />
+		</association>
+	</resultMap>
+
+	<select id="queryUserByKeyWords" resultMap="queryUserRstMap1"
+		parameterType="com.sxsram.ssm.entity.UserExpand">
+		select
+		u.*,
+		c.name as cname,c.idcard as cidcard,
+		r.roleName as rrolename,r.roleGrade as rrolegrade,
+		t1.id as
+		areaid,t1.name as areaname,
+		t2.id as cityid,t2.name as cityname,
+		t3.id
+		as provinceid,t3.name as provincename
+		from
+		t_user u
+		join t_role r on
+		u.roleId = r.id
+		left join t_certification c on
+		u.certificationId = c.id
+		left join t_address t1 on u.area=t1.id
+		left join t_address t2 on
+		t1.parentId=t2.id
+		left join t_address t3 on t2.parentId=t3.id
+		where
+		status=0 and (u.username=#{keywords} or u.phone=#{keywords})
+	</select>
+
+
+	<select id="countUsername" resultType="int" parameterType="string">
+		select
+		count(*)
+		from
+		t_user
+		where
+		username = #{username}
+	</select>
+	<select id="countPhone" resultType="int" parameterType="string">
+		select
+		count(*)
+		from
+		t_user
+		where
+		phone = #{phone}
+	</select>
+
+	<select id="countOpenId" resultType="int" parameterType="string">
+		select
+		count(*)
+		from
+		t_user
+		where
+		openId = #{openId}
+	</select>
+
+	<!-- parameterType: 指定输入参数类型是POJO，使用#{}指定POJO的属性名，MyBatis通过OGNL获取对象的属性值 -->
+	<insert id="insertNewCertification" parameterType="com.sxsram.ssm.entity.Certification">
+		<!-- 将插入数据的主键返回，返回到user对象中 keyProperty: 将查询到的主键赋给 parameterType的哪个属性 order: 
+			AFTER，插入之后执行查询 -->
+		<selectKey keyProperty="id" order="AFTER" resultType="int">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into
+		t_certification
+		values();
+	</insert>
+
+	<!-- parameterType: 指定输入参数类型是POJO，使用#{}指定POJO的属性名，MyBatis通过OGNL获取对象的属性值 -->
+	<insert id="insertNewUser" parameterType="com.sxsram.ssm.entity.UserExpand">
+		<!-- 将插入数据的主键返回，返回到user对象中 keyProperty: 将查询到的主键赋给 parameterType的哪个属性 order: 
+			AFTER，插入之后执行查询 -->
+		<selectKey keyProperty="id" order="AFTER" resultType="int">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into
+		t_user(openId,username,password,province,city,area,phone,headImgUrl,certificationId,roleId,proxy_user_id)
+		values(#{openId},#{username},#{password},#{province},#{city},#{area},#{phone},#{headImgUrl},#{certification.id},
+		<trim suffixOverrides=",">
+			<if test="role!=null">
+				#{role.id},
+			</if>
+			<if test="role==null">
+				null,
+			</if>
+			<if test="proxyUser!=null">
+				#{proxyUser.id},
+			</if>
+			<if test="proxyUser==null">
+				null,
+			</if>
+		</trim>
+		)
+	</insert>
+
+	<update id="updateUserAccountInformation" parameterType="com.sxsram.ssm.entity.UserExpand">
+		update
+		t_user
+		set
+		jfAccountId = #{jfAccount.id},
+		dlbAccountId =
+		#{dlbAccount.id},
+		moneyAccountId = #{moneyAccount.id},
+		yljAccountId=#{yljAccount.id}
+		where
+		id = #{id}
+	</update>
+
+	<update id="updateUserOpenId" parameterType="com.sxsram.ssm.entity.UserExpand">
+		update
+		t_user
+		set
+		openId = #{openId}
+		where
+		id = #{id}
+	</update>
+
+	<update id="updateCertification" parameterType="com.sxsram.ssm.entity.Certification">
+		update
+		t_certification
+		set
+		name = #{name}
+		where
+		id = #{id}
+	</update>
+
+	<select id="queryUserWhenLogin" resultMap="queryUserRstMap"
+		parameterType="com.sxsram.ssm.entity.UserExpand">
+		select
+		u.*,
+		c.name as cname,c.idcard as cidcard,
+		r.roleName as rrolename,r.roleGrade as rrolegrade,
+		rp.permId as
+		rppermid, p.name as pname,p.operationId as poperationid,
+		o.name as
+		oname,o.url as ourl,o.imgUrl as oimgurl,o.style as ostyle,o.seqnum as
+		oseqnum,o.isMenu as oismenu,o.parentId as oparentid
+		from
+		t_user u
+		join
+		t_role r on u.roleId = r.id
+		left join t_certification c on
+		u.certificationId = c.id
+		left join t_role_perm rp on rp.roleId = r.id
+		left join t_permission p on rp.permId = p.id
+		left join t_operation o on
+		p.operationId = o.id
+		where
+		(u.username=#{username} or
+		u.phone=#{username}) and
+		u.password=md5(#{password}) and u.status=0
+		order by
+		o.seqnum asc
+	</select>
+
+	<select id="queryUserAccountInfo" resultMap="queryUserAccoutRstMap"
+		parameterType="java.lang.String">
+		select
+		u.*,
+		jf.accountNo as
+		jfaccountNo,jf.accountBalance
+		as jfaccountBalance,
+		jf.totalPlatformIncomings as
+		jftotalPlatformIncomings,
+		jf.totalPlatformOutgoings as
+		jftotalPlatformOutgoings,
+		jf.totalUserIncomings as
+		jftotalUserIncomings,
+		jf.totalUserOutgoings as
+		jftotalUserOutgoings,
+		dlb.accountNo as dlbaccountNo,dlb.accountBalance
+		as dlbaccountBalance,
+		dlb.totalPlatformIncomings as
+		dlbtotalPlatformIncomings,
+		dlb.totalPlatformOutgoings as
+		dlbtotalPlatformOutgoings,
+		dlb.totalUserIncomings as
+		dlbtotalUserIncomings,
+		dlb.totalUserOutgoings
+		as dlbtotalUserOutgoings,
+		money.accountNo as
+		moneyaccountNo,money.accountBalance as
+		moneyaccountBalance,
+		money.totalPlatformIncomings as
+		moneytotalPlatformIncomings,
+		money.totalPlatformOutgoings as
+		moneytotalPlatformOutgoings,
+		money.totalUserIncomings as
+		moneytotalUserIncomings,
+		money.totalUserOutgoings as
+		moneytotalUserOutgoings,
+		jdb.accountNo as
+		jdbaccountNo,jdb.accountBalance as
+		jdbaccountBalance,
+		jdb.totalPlatformIncomings as
+		jdbtotalPlatformIncomings,
+		jdb.totalPlatformOutgoings as
+		jdbtotalPlatformOutgoings,
+		jdb.totalUserIncomings as
+		jdbtotalUserIncomings,
+		jdb.totalUserOutgoings
+		as
+		jdbtotalUserOutgoings,
+		ylj.accountNo as
+		yljaccountNo,ylj.accountBalance as yljaccountBalance,
+		ylj.totalPlatformIncomings as yljtotalPlatformIncomings,
+		ylj.totalPlatformOutgoings as yljtotalPlatformOutgoings,
+		ylj.totalUserIncomings as yljtotalUserIncomings,
+		ylj.totalUserOutgoings as yljtotalUserOutgoings
+		from
+		t_user u
+		join
+		t_jf_account jf
+		on u.jfAccountId = jf.id
+		join
+		t_dlb_account dlb
+		on
+		u.dlbAccountId = dlb.id
+		join t_money_account money
+		on u.moneyAccountId =
+		money.id
+		join t_ylj_account ylj
+		on u.yljAccountId
+		= ylj.id
+		join
+		t_jdb_account jdb
+		on u.jdbAccountId
+		= jdb.id
+		where
+		u.id=#{keyWord} or
+		u.openId = #{keyWord}
+	</select>
+	<select id="queryUserByOpenId" resultMap="queryUserRstMap"
+		parameterType="java.lang.String">
+		select
+		u.*,r.roleName,r.roleGrade,c.name,c.idcard
+		from
+		t_user u join t_role r on u.roleId = r.id
+		left join t_certification c
+		on u.certificationId = c.id
+		where
+		u.openId = #{openId}
+	</select>
+
+	<select id="queryUserById" resultMap="queryUserRstMap"
+		parameterType="int">
+		select
+		u.*,
+		r.roleName,r.roleGrade,
+		jf.accountNo as
+		jfaccountNo,jf.accountBalance as jfaccountBalance,
+		jf.totalPlatformIncomings as jftotalPlatformIncomings,
+		jf.totalPlatformOutgoings as jftotalPlatformOutgoings,
+		jf.totalUserIncomings as jftotalUserIncomings,
+		jf.totalUserOutgoings as
+		jftotalUserOutgoings,
+		dlb.accountNo as dlbaccountNo,dlb.accountBalance
+		as dlbaccountBalance,
+		dlb.totalPlatformIncomings as
+		dlbtotalPlatformIncomings,
+		dlb.totalPlatformOutgoings as
+		dlbtotalPlatformOutgoings,
+		dlb.totalUserIncomings as
+		dlbtotalUserIncomings,
+		dlb.totalUserOutgoings as dlbtotalUserOutgoings,
+		money.accountNo as moneyaccountNo,money.accountBalance as
+		moneyaccountBalance,
+		money.totalPlatformIncomings as
+		moneytotalPlatformIncomings,
+		money.totalPlatformOutgoings as
+		moneytotalPlatformOutgoings,
+		money.totalUserIncomings as
+		moneytotalUserIncomings,
+		money.totalUserOutgoings as
+		moneytotalUserOutgoings,
+		ylj.accountNo as
+		yljaccountNo,ylj.accountBalance as yljaccountBalance,
+		ylj.totalPlatformIncomings as yljtotalPlatformIncomings,
+		ylj.totalPlatformOutgoings as yljtotalPlatformOutgoings,
+		ylj.totalUserIncomings as yljtotalUserIncomings,
+		ylj.totalUserOutgoings as yljtotalUserOutgoings
+		from
+		t_user u
+		join t_role
+		r
+		on u.roleId = r.id
+		join t_jf_account jf
+		on u.jfAccountId = jf.id
+		join
+		t_dlb_account dlb
+		on u.dlbAccountId = dlb.id
+		join t_money_account money
+		on u.moneyAccountId = money.id
+		join t_ylj_account ylj
+		on u.yljAccountId
+		= ylj.id
+		where
+		u.id = #{id}
+	</select>
+
+	<select id="queryAllShoppingMalls" resultType="com.sxsram.ssm.entity.ShoppingMallExpand">
+		select
+		*
+		from
+		t_shopping_mall
+	</select>
+
+	<select id="queryEparchies" resultType="com.sxsram.ssm.entity.Address">
+		select
+		t2.*
+		from
+		t_address
+		t1 join t_address t2 on t1.id = t2.parentId
+		where
+		t1.id = #{addrId}
+	</select>
+
+	<select id="queryAllProvinces" resultType="com.sxsram.ssm.entity.Address">
+		select
+		*
+		from
+		t_address
+		where
+		parentId = 0
+	</select>
+
+	<select id="queryAllRoles" resultType="com.sxsram.ssm.entity.Role">
+		select
+		*
+		from
+		t_role
+		where
+		seqNum is not null
+		order by
+		seqNum asc
+	</select>
+
+	<select id="queryCities" resultType="com.sxsram.ssm.entity.Address">
+		select
+		t2.*
+		from
+		t_address t1
+		join t_address t2 on t1.id = t2.parentId
+		where
+		t1.id = #{addrId}
+	</select>
+
+	<select id="getMoneyAccountBalance" resultType="double"
+		parameterType="int">
+		select
+		m.accountBalance
+		from
+		t_user u join t_money_account
+		m on u.moneyAccountId = m.id
+		where
+		u.id = #{userId}
+	</select>
+
+
+	<select id="findIndentByIndentNo" resultType="com.sxsram.ssm.entity.Indent"
+		parameterType="string">
+		select
+		*
+		from
+		t_indent
+		where
+		indentNo=#{indentNo}
+	</select>
+
+	<select id="queryUserByPhone" resultMap="queryUserRstMap"
+		parameterType="string">
+		select
+		*
+		from
+		t_user u join t_role r on u.roleId = r.id
+		left join t_certification c on u.certificationId = c.id
+		where
+		u.phone =
+		#{phone}
+	</select>
+
+	<update id="updateIndentFlag" parameterType="int">
+		update t_indent set
+		flag = 1 where id = #{indentId}
+	</update>
+
+	<select id="findUserMoneyAccountById" resultType="com.sxsram.ssm.entity.AccountExpand"
+		parameterType="int">
+		select
+		r.*
+		from
+		t_user u join t_money_account r on
+		u.moneyAccountId = r.id
+		where
+		u.id = #{userId}
+	</select>
+
+	<update id="updateUserMoneyBalance" parameterType="com.sxsram.ssm.entity.AccountExpand">
+		update
+		t_money_account set accountBalance = #{accountBalance} where id =
+		#{id}
+	</update>
+
+	<update id="updateUserMoneyTotalPlatformOutgoings"
+		parameterType="com.sxsram.ssm.entity.AccountExpand">
+		update
+		t_money_account set totalPlatformOutgoings =
+		#{totalPlatformOutgoings} where id =
+		#{id}
+	</update>
+
+	<insert id="insertNewMoneyChangeRecord" parameterType="com.sxsram.ssm.entity.AccountRecordExpand">
+		insert into
+		t_money_record(operation,operateTime,operateNum,operateDesc,accountId,operateObjId)
+		values(#{operation},now(),#{operateNum},#{operateDesc},#{account.id}
+		<if test="operateObj!=null">
+			,#{operateObj.id})
+		</if>
+		<if test="operateObj==null">
+			,null)
+		</if>
+	</insert>
+
+	<select id="findUserJfAccountById" resultType="com.sxsram.ssm.entity.AccountExpand"
+		parameterType="int">
+		select
+		r.*
+		from
+		t_user u join t_jf_account r on
+		u.jfAccountId = r.id
+		where
+		u.id = #{userId}
+	</select>
+
+	<update id="updateUserJfBalance" parameterType="com.sxsram.ssm.entity.AccountExpand">
+		update
+		t_jf_account set accountBalance = #{accountBalance} where id =
+		#{id}
+	</update>
+
+	<insert id="insertNewJfChangeRecord" parameterType="com.sxsram.ssm.entity.AccountRecordExpand">
+		insert into
+		t_jf_record(operation,operateTime,operateNum,operateDesc,accountId,operateObjId)
+		values(#{operation},now(),#{operateNum},#{operateDesc},#{account.id}
+		<if test="operateObj!=null">
+			,#{operateObj.id})
+		</if>
+		<if test="operateObj==null">
+			,null)
+		</if>
+	</insert>
+
+	<insert id="insertNewJournalBookItem" parameterType="com.sxsram.ssm.entity.JournalBookExpand">
+		<!-- 将插入数据的主键返回，返回到user对象中 keyProperty: 将查询到的主键赋给 parameterType的哪个属性 order: 
+			AFTER，插入之后执行查询 -->
+		<selectKey keyProperty="id" order="AFTER" resultType="int">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into
+		t_journal_book(indentId,businessId,clientId,commodityTypeId,commodityName,amount,premiumRates,giftJf,rewardJf,journalTime,rewardId)
+		values(#{indent.id},#{business.id},#{client.id},
+		#{commodityType.id},#{commodityName},#{amount},#{premiumRates},#{giftJf},#{rewardJf},now()
+		<if test="reward!=null">
+			,#{reward.id})
+		</if>
+		<if test="reward==null">
+			,null)
+		</if>
+	</insert>
+
+	<select id="queryCommodityByParentId" resultType="com.sxsram.ssm.entity.CommodityType">
+		select
+		t2.*
+		from
+		t_commodity_type t1 join t_commodity_type t2 on t1.id = t2.parentId
+		where
+		t1.id = #{parentId}
+	</select>
+
+	<!-- parameterType: 指定输入参数类型是POJO，使用#{}指定POJO的属性名，MyBatis通过OGNL获取对象的属性值 -->
+	<insert id="insertNewJfAccount" parameterType="com.sxsram.ssm.entity.AccountExpand">
+		<!-- 将插入数据的主键返回，返回到user对象中 keyProperty: 将查询到的主键赋给 parameterType的哪个属性 order: 
+			AFTER，插入之后执行查询 -->
+		<selectKey keyProperty="id" order="AFTER" resultType="int">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into t_jf_account
+		(accountNo,accountBalance,totalPlatformIncomings,totalPlatformOutgoings,totalUserIncomings,totalUserOutgoings,userId)
+		values
+		(#{accountNo},#{accountBalance},#{totalPlatformIncomings},#{totalPlatformOutgoings},#{totalUserIncomings},#{totalUserOutgoings},#{user.id})
+	</insert>
+
+	<!-- parameterType: 指定输入参数类型是POJO，使用#{}指定POJO的属性名，MyBatis通过OGNL获取对象的属性值 -->
+	<insert id="insertNewDlbAccount" parameterType="com.sxsram.ssm.entity.AccountExpand">
+		<!-- 将插入数据的主键返回，返回到user对象中 keyProperty: 将查询到的主键赋给 parameterType的哪个属性 order: 
+			AFTER，插入之后执行查询 -->
+		<selectKey keyProperty="id" order="AFTER" resultType="int">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into t_dlb_account
+		(accountNo,accountBalance,totalPlatformIncomings,totalPlatformOutgoings,totalUserIncomings,totalUserOutgoings,userId)
+		values
+		(#{accountNo},#{accountBalance},#{totalPlatformIncomings},#{totalPlatformOutgoings},#{totalUserIncomings},#{totalUserOutgoings},#{user.id})
+	</insert>
+
+	<!-- parameterType: 指定输入参数类型是POJO，使用#{}指定POJO的属性名，MyBatis通过OGNL获取对象的属性值 -->
+	<insert id="insertNewMoneyAccount" parameterType="com.sxsram.ssm.entity.AccountExpand">
+		<!-- 将插入数据的主键返回，返回到user对象中 keyProperty: 将查询到的主键赋给 parameterType的哪个属性 order: 
+			AFTER，插入之后执行查询 -->
+		<selectKey keyProperty="id" order="AFTER" resultType="int">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into t_money_account
+		(accountNo,accountBalance,totalPlatformIncomings,totalPlatformOutgoings,totalUserIncomings,totalUserOutgoings,userId)
+		values
+		(#{accountNo},#{accountBalance},#{totalPlatformIncomings},#{totalPlatformOutgoings},#{totalUserIncomings},#{totalUserOutgoings},#{user.id})
+	</insert>
+
+	<!-- parameterType: 指定输入参数类型是POJO，使用#{}指定POJO的属性名，MyBatis通过OGNL获取对象的属性值 -->
+	<insert id="insertNewYljAccount" parameterType="com.sxsram.ssm.entity.AccountExpand">
+		<!-- 将插入数据的主键返回，返回到user对象中 keyProperty: 将查询到的主键赋给 parameterType的哪个属性 order: 
+			AFTER，插入之后执行查询 -->
+		<selectKey keyProperty="id" order="AFTER" resultType="int">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into t_ylj_account
+		(accountNo,accountBalance,totalPlatformIncomings,totalPlatformOutgoings,totalUserIncomings,totalUserOutgoings,userId)
+		values
+		(#{accountNo},#{accountBalance},#{totalPlatformIncomings},#{totalPlatformOutgoings},#{totalUserIncomings},#{totalUserOutgoings},#{user.id})
+	</insert>
+
+	<resultMap type="com.sxsram.ssm.entity.JournalBookExpand" id="queryJournalBooksMap">
+		<id column="id" property="id" />
+		<result column="amount" property="amount" />
+		<result column="premiumRates" property="premiumRates" />
+		<result column="commodityName" property="commodityName" />
+		<result column="giftJf" property="giftJf" />
+		<result column="rewardJf" property="rewardJf" />
+		<result column="journalTime" property="journalTime" />
+		<association property="business" javaType="com.sxsram.ssm.entity.UserExpand">
+			<id column="businessId" property="id" />
+			<result column="busername" property="username" />
+			<result column="bphone" property="phone" />
+		</association>
+		<association property="client" javaType="com.sxsram.ssm.entity.UserExpand">
+			<id column="clientId" property="id" />
+			<result column="cusername" property="username" />
+			<result column="cphone" property="phone" />
+		</association>
+		<association property="reward" javaType="com.sxsram.ssm.entity.UserExpand">
+			<id column="rewardId" property="id" />
+			<result column="username" property="username" />
+			<result column="phone" property="phone" />
+		</association>
+	</resultMap>
+	<select id="queryJournalBookRecordsByUserId" resultMap="queryJournalBooksMap"
+		parameterType="int">
+		select
+		jb.*,b.username as busername,b.phone as
+		bphone,c.username as cusername,c.phone as
+		cphone,r.username ,r.phone
+		from
+		t_journal_book jb join t_user b on
+		jb.businessId = b.id
+		join t_user
+		c
+		on jb.clientId = c.id
+		left join t_user
+		r on jb.rewardId = r.id
+		where
+		b.id = #{userId}
+		order by
+		jb.journalTime
+		desc
+		limit
+		0,15
+	</select>
+
+
+	<!-- parameterType: 指定输入参数类型是POJO，使用#{}指定POJO的属性名，MyBatis通过OGNL获取对象的属性值 -->
+	<insert id="insertNewRechargeOrWithDrawRecord"
+		parameterType="com.sxsram.ssm.entity.RechargeAndWithDrawRecordExpand">
+		<!-- 将插入数据的主键返回，返回到user对象中 keyProperty: 将查询到的主键赋给 parameterType的哪个属性 order: 
+			AFTER，插入之后执行查询 -->
+		<selectKey keyProperty="id" order="AFTER" resultType="int">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into t_recharge_withdraw_record
+		(operateType,orderNo,operateNum,serviceNum,operateTime,operateState,operateUserIp,userId)
+		values
+		(#{operateType},#{orderNo},#{operateNum},#{serviceNum},now(),#{operateState},#{operateUserIp},#{user.id})
+	</insert>
+
+	<update id="updateRechageOrWithDarwRecordState"
+		parameterType="com.sxsram.ssm.entity.RechargeAndWithDrawRecordExpand">
+		update
+		t_recharge_withdraw_record
+		set
+		operateState =
+		#{operateState}
+		where
+		id = #{id}
+	</update>
+
+	<select id="queryRechargeOrWithDarwRecord" resultMap="queryRwrMap"
+		parameterType="string">
+		select
+		rw.*
+		from
+		t_recharge_withdraw_record rw join t_user
+		u on rw.userId = u.id
+		where
+		rw.orderNo = #{orderNo}
+	</select>
+
+	<select id="queryAllWithDrawsRecords"
+		resultType="com.sxsram.ssm.entity.RechargeAndWithDrawRecordExpand"
+		parameterType="int">
+		select
+		rw.*
+		from
+		t_recharge_withdraw_record rw join t_user
+		u on rw.userId = u.id
+		where
+		u.id = #{userId} and rw.operateType = 1
+		order by
+		rw.operateTime desc
+		limit
+		0,15
+	</select>
+
+	<select id="queryAllRechargeRecords"
+		resultType="com.sxsram.ssm.entity.RechargeAndWithDrawRecordExpand"
+		parameterType="int">
+		select
+		rw.*
+		from
+		t_recharge_withdraw_record rw join t_user
+		u on rw.userId = u.id
+		where
+		u.id = #{userId} and rw.operateType = 0
+		order by
+		rw.operateTime desc
+		limit
+		0,15
+	</select>
+
+	<!-- public List<UserExpand> queryAllUsers() throws Exception; public List<UserExpand> 
+		queryAllProxyUsers() throws Exception; public List<UserExpand> queryAllSellers() 
+		throws Exception; public void addNewUser(UserExpand userExpand) throws Exception; 
+		public void updateUser(UserExpand userExpand) throws Exception; public void 
+		deleteUser(UserExpand userExpand) throws Exception; -->
+
+	<select id="queryAllManagers" resultMap="queryUserRstMap1"
+		parameterType="com.sxsram.ssm.entity.UserExpand">
+		select
+		u.*,
+		c.name as cname,c.idcard as cidcard,
+		r.roleName as rrolename,r.roleGrade as rrolegrade,
+		t1.id as
+		areaid,t1.name as areaname,
+		t2.id as cityid,t2.name as cityname,
+		t3.id
+		as provinceid,t3.name as provincename
+		from
+		t_user u
+		join t_role r on
+		u.roleId = r.id
+		left join t_certification c on
+		u.certificationId = c.id
+		left join t_address t1 on u.area=t1.id
+		left join t_address t2 on
+		t1.parentId=t2.id
+		left join t_address t3 on t2.parentId=t3.id
+		where
+		status=0 and r.roleName='管理员'
+	</select>
+
+	<!-- public List<UserExpand> queryAllUsers() throws Exception; public List<UserExpand> 
+		queryAllProxyUsers() throws Exception; public List<UserExpand> queryAllSellers() 
+		throws Exception; public void addNewUser(UserExpand userExpand) throws Exception; 
+		public void updateUser(UserExpand userExpand) throws Exception; public void 
+		deleteUser(UserExpand userExpand) throws Exception; -->
+
+
+	<select id="queryAllSellers" resultMap="queryUserRstMap1">
+		select
+		u.*,
+		c.name as
+		cname,c.idcard as cidcard,
+		r.roleName as rrolename,r.roleGrade as
+		rrolegrade,
+		p.username as
+		pusername,p.phone as pphone,
+		t1.id as
+		areaid,t1.name as areaname,
+		t2.id as cityid,t2.name as cityname,
+		t3.id
+		as provinceid,t3.name as provincename
+		from
+		t_user u
+		join t_role r on
+		u.roleId = r.id
+		left join
+		t_user p on u.proxy_user_id = p.id
+		left join
+		t_certification c on
+		u.certificationId = c.id
+		left join t_address t1 on
+		u.area=t1.id
+		left join t_address t2 on
+		t1.parentId=t2.id
+		left join
+		t_address t3 on t2.parentId=t3.id
+		where
+		u.status=0 and r.roleName='商家'
+	</select>
+
+	<select id="queryAllSellersByProxyId" resultMap="queryUserRstMap1"
+		parameterType="Integer">
+		select
+		u.*,
+		c.name as cname,c.idcard as cidcard,
+		r.roleName as rrolename,r.roleGrade as rrolegrade,
+		p.username as
+		pusername,p.phone as pphone,
+		t1.id as
+		areaid,t1.name as areaname,
+		t2.id
+		as cityid,t2.name as cityname,
+		t3.id
+		as provinceid,t3.name as
+		provincename
+		from
+		t_user u
+		join t_role r on
+		u.roleId = r.id
+		left join
+		t_user p on u.proxy_user_id = p.id
+		left join t_certification c on
+		u.certificationId = c.id
+		left join t_address t1 on u.area=t1.id
+		left
+		join t_address t2 on
+		t1.parentId=t2.id
+		left join t_address t3 on
+		t2.parentId=t3.id
+		where
+		u.status=0 and r.roleName='商家' and
+		u.proxy_user_id=#{proxyId}
+	</select>
+
+	<select id="queryAllProxyUsers" resultMap="queryUserRstMap1"
+		parameterType="com.sxsram.ssm.entity.UserExpand">
+		select
+		u.*,
+		c.name as cname,c.idcard as cidcard,
+		r.roleName as rrolename,r.roleGrade as rrolegrade,
+		t1.id as
+		areaid,t1.name as areaname,
+		t2.id as cityid,t2.name as cityname,
+		t3.id
+		as provinceid,t3.name as provincename
+		from
+		t_user u
+		join t_role r on
+		u.roleId = r.id
+		left join t_certification c on
+		u.certificationId = c.id
+		left join t_address t1 on u.area=t1.id
+		left join t_address t2 on
+		t1.parentId=t2.id
+		left join t_address t3 on t2.parentId=t3.id
+		where
+		status=0 and r.roleName='代理商'
+	</select>
+
+
+	<select id="queryAllUsers" resultMap="queryUserRstMap1"
+		parameterType="com.sxsram.ssm.entity.UserExpand">
+		select
+		u.*,
+		c.name as cname,c.idcard as cidcard,
+		r.roleName as rrolename,r.roleGrade as rrolegrade,
+		p.username as
+		pusername,p.phone as pphone,
+		t1.id as
+		areaid,t1.name as areaname,
+		t2.id
+		as cityid,t2.name as cityname,
+		t3.id
+		as provinceid,t3.name as
+		provincename
+		from
+		t_user u
+		join t_role r on
+		u.roleId = r.id
+		left join
+		t_user p on u.proxy_user_id = p.id
+		left join t_certification c on
+		u.certificationId = c.id
+		left join t_address
+		t1 on u.area=t1.id
+		left join
+		t_address t2 on
+		t1.parentId=t2.id
+		left join
+		t_address t3 on
+		t2.parentId=t3.id
+		where
+		u.status=0
+	</select>
+
+	<update id="updateUser" parameterType="com.sxsram.ssm.entity.UserExpand">
+		update t_user
+		<trim prefix="set" suffixOverrides=",">
+			<if test="openId != null">
+				openId = #{openId},
+			</if>
+			<if test="password != null">
+				password = md5(#{password}),
+			</if>
+			<if test="province != null">
+				province = #{province},
+			</if>
+			<if test="city != null">
+				city = #{city},
+			</if>
+			<if test="area != null">
+				area = #{area},
+			</if>
+			<if test="phone != null">
+				phone = #{phone},
+			</if>
+			<if test="headImgUrl != null">
+				headImgUrl = #{headImgUrl},
+			</if>
+			<if test="getCashFlag != null">
+				getCashFlag = #{getCashFlag},
+			</if>
+			<if test="incomFlag != null">
+				incomFlag = #{incomFlag},
+			</if>
+			<if test="role != null">
+				<if test="role.id != null">
+					roleId = #{role.id},
+				</if>
+				<if test="role.id == null">
+					<if test="role.roleName != null">
+						roleId = (select id from t_role where
+						roleName=#{role.roleName}),
+					</if>
+				</if>
+			</if>
+			<if test="proxyUser != null">
+				<if test="proxyUser.id != null">
+					proxy_user_id = #{proxyUser.id},
+				</if>
+				<if test="proxyUser.id == null">
+					proxy_user_id = null,
+				</if>
+			</if>
+			<if test="proxyUser == null">
+				proxy_user_id = null,
+			</if>
+		</trim>
+		<where>
+			<if test="id != null">
+				id = #{id}
+			</if>
+			<if test="id == null">
+				<if test="username != null">
+					username=#{username}
+				</if>
+				<if test="username == null">
+					<if test="phone != null">
+						phone=#{phone}
+					</if>
+				</if>
+			</if>
+		</where>
+	</update>
+
+	<!-- parameterType: 指定输入参数类型是POJO，使用#{}指定POJO的属性名，MyBatis通过OGNL获取对象的属性值 -->
+	<insert id="addNewUser" parameterType="com.sxsram.ssm.entity.UserExpand">
+		<!-- 将插入数据的主键返回，返回到user对象中 keyProperty: 将查询到的主键赋给 parameterType的哪个属性 order: 
+			AFTER，插入之后执行查询 -->
+		<selectKey keyProperty="id" order="AFTER" resultType="int">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into
+		t_user(openId,username,password,province,city,area,phone,headImgUrl,roleId,proxy_user_id)
+		values(#{openId},#{username},md5(#{password}),#{province},#{city},#{area},#{phone},#{headImgUrl},
+		<trim suffixOverrides=",">
+			<if test="role!=null">
+				#{role.id},
+			</if>
+			<if test="role==null">
+				null,
+			</if>
+			<if test="proxyUser!=null">
+				#{proxyUser.id},
+			</if>
+			<if test="proxyUser==null">
+				null,
+			</if>
+		</trim>
+		)
+	</insert>
+
+	<delete id="deleteUser" parameterType="com.sxsram.ssm.entity.UserExpand">
+		update t_user set status =
+		1 where username=#{username}
+	</delete>
+
+	<select id="queryRoleByUserId" resultType="com.sxsram.ssm.entity.RoleExpand"
+		parameterType="int">
+		select
+		r.*
+		from
+		t_user u join t_role r on u.roleId = r.id
+		where
+		u.id = #{id}
+	</select>
+
+
+
+
+
+
+	<select id="queryTotalConsumeOffline" parameterType="int"
+		resultType="double">
+		select
+		SUM(amount)
+		from
+		t_journal_book
+		where
+		(flag = 1 or flag =
+		2) and clientId = #{id}
+	</select>
+	<select id="queryTotalConsumeOnline" parameterType="int"
+		resultType="double">
+		select
+		SUM(totalAmount)
+		from
+		t_online_journal
+		where
+		status = 0
+		and userId = #{id}
+	</select>
+	<select id="queryTotalRecharge" parameterType="int" resultType="double">
+		select
+		SUM(operateNum)
+		from
+		t_recharge_withdraw_record
+		where
+		operateType =
+		0 and operateState = 2 and userId = #{id}
+	</select>
+	<select id="queryTotalWithDraws" parameterType="int" resultType="double">
+		select
+		SUM(operateNum)
+		from
+		t_recharge_withdraw_record
+		where
+		operateType =
+		1 and operateState = 2 and userId = #{id}
+	</select>
+	<select id="queryTotalRewardJf" parameterType="int" resultType="double">
+		select
+		SUM(operateNum)
+		from
+		t_jf_record jfr join t_jf_account jfa
+		on
+		jfr.accountId = jfa.id and jfa.userId = #{id}
+		where
+		jfr.operation = 0
+	</select>
+	<select id="queryTotalTransferDlb" parameterType="int"
+		resultType="double">
+		select
+		SUM(operateNum)
+		from
+		t_dlb_record jfr join
+		t_dlb_account jfa
+		on jfr.accountId = jfa.id and jfa.userId = #{id}
+		where
+		jfr.operation = 0
+	</select>
+	<select id="queryTotalRewardMoney" parameterType="int"
+		resultType="double">
+		select
+		SUM(operateNum)
+		from
+		t_money_record jfr join
+		t_money_account jfa
+		on jfr.accountId = jfa.id and jfa.userId = #{id}
+		where
+		jfr.operation = 0
+	</select>
+	<select id="queryTotalRewardJdb" parameterType="int" resultType="double">
+		select
+		SUM(operateNum)
+		from
+		t_jdb_record jfr join t_jdb_account jfa
+		on
+		jfr.accountId = jfa.id and jfa.userId = #{id}
+		where
+		jfr.operation = 0
+	</select>
+	<select id="queryTotalRewardYlj" parameterType="int" resultType="double">
+		select
+		SUM(operateNum)
+		from
+		t_ylj_record jfr join t_ylj_account jfa
+		on
+		jfr.accountId = jfa.id and jfa.userId = #{id}
+		where
+		jfr.operation = 0
+	</select>
+	<select id="queryTotalTransferYlj" parameterType="int"
+		resultType="double">
+		select
+		SUM(operateNum)
+		from
+		t_ylj_record jfr join
+		t_ylj_account jfa
+		on jfr.accountId = jfa.id and jfa.userId = #{id}
+		where
+		jfr.operation = 1
+	</select>
+	<select id="queryTotalSubmitOrderValue" parameterType="int"
+		resultType="double">
+		select
+		SUM(amount * premiumRates / 100)
+		from
+		t_journal_book
+		where
+		(flag = 1 or flag = 2) and businessId = #{id}
+	</select>
+
+
+
+
+	<!-- 2017-01-28 -->
+	<!-- 收益账户记录 + 收益账户记录总数量 -->
+	<select id="querySyAccountRecordsTotalNum" resultType="Integer"
+		parameterType="com.sxsram.ssm.entity.UserExpandQueryVo">
+		select
+		COUNT(*)
+		from
+		t_user u join
+		t_platform_sy_distributed_record dr on
+		u.id
+		=
+		dr.userId
+		where
+		u.id =
+		#{id}
+		<if test="pagination != null">
+			<if test="pagination.orderByCols != null">
+				order by ${pagination.orderByCols}
+			</if>
+			<if test="pagination.limitStart != null">
+				limit #{pagination.limitStart},#{pagination.limitNum}
+			</if>
+		</if>
+	</select>
+	<select id="queryAllSyRecords"
+		resultType="com.sxsram.ssm.entity.PlatformSyDistributedRecordExpand"
+		parameterType="com.sxsram.ssm.entity.UserExpandQueryVo">
+		select
+		dr.*
+		from
+		t_user u join
+		t_platform_sy_distributed_record dr on u.id
+		= dr.userId
+		where
+		u.id =
+		#{id}
+		<if test="pagination != null">
+			<if test="pagination.orderByCols != null">
+				order by ${pagination.orderByCols}
+			</if>
+			<if test="pagination.limitStart != null">
+				limit #{pagination.limitStart},#{pagination.limitNum}
+			</if>
+		</if>
+	</select>
+
+	<!-- Money账户记录 + Money账户记录总数量 -->
+	<select id="queryMoneyAccountRecordsTotalNum" resultType="Integer"
+		parameterType="com.sxsram.ssm.entity.UserExpandQueryVo">
+		select
+		COUNT(*)
+		from
+		t_user u join t_money_account da on u.id = da.userId
+		join t_money_record dr on da.id = dr.accountId
+		where
+		u.id = #{id}
+		<if test="pagination != null">
+			<if test="pagination.orderByCols != null">
+				order by ${pagination.orderByCols}
+			</if>
+			<if test="pagination.limitStart != null">
+				limit #{pagination.limitStart},#{pagination.limitNum}
+			</if>
+		</if>
+	</select>
+	<select id="queryAllMoneyRecords" resultType="com.sxsram.ssm.entity.AccountRecordExpand"
+		parameterType="com.sxsram.ssm.entity.UserExpandQueryVo">
+		select
+		dr.*
+		from
+		t_user u join t_money_account da on u.id =
+		da.userId
+		join
+		t_money_record dr on da.id = dr.accountId
+		where
+		u.id =
+		#{id}
+		<if test="pagination != null">
+			<if test="pagination.orderByCols != null">
+				order by ${pagination.orderByCols}
+			</if>
+			<if test="pagination.limitStart != null">
+				limit #{pagination.limitStart},#{pagination.limitNum}
+			</if>
+		</if>
+	</select>
+
+	<!-- 得利宝账户记录 + 得利宝账户记录总数量 -->
+	<select id="queryDlbAccountRecordsTotalNum" resultType="Integer"
+		parameterType="com.sxsram.ssm.entity.UserExpandQueryVo">
+		select
+		COUNT(*)
+		from
+		t_user u join t_dlb_account da on u.id =
+		da.userId
+		join t_dlb_record
+		dr on da.id = dr.accountId
+		where
+		u.id =
+		#{id}
+		<if test="pagination != null">
+			<if test="pagination.orderByCols != null">
+				order by ${pagination.orderByCols}
+			</if>
+			<if test="pagination.limitStart != null">
+				limit #{pagination.limitStart},#{pagination.limitNum}
+			</if>
+		</if>
+	</select>
+	<select id="queryAllDlbRecords" resultType="com.sxsram.ssm.entity.AccountRecordExpand"
+		parameterType="com.sxsram.ssm.entity.UserExpandQueryVo">
+		select
+		dr.*
+		from
+		t_user u join t_dlb_account da on u.id =
+		da.userId
+		join
+		t_dlb_record dr on da.id = dr.accountId
+		where
+		u.id =
+		#{id}
+		<if test="pagination != null">
+			<if test="pagination.orderByCols != null">
+				order by ${pagination.orderByCols}
+			</if>
+			<if test="pagination.limitStart != null">
+				limit #{pagination.limitStart},#{pagination.limitNum}
+			</if>
+		</if>
+	</select>
+
+
+	<!-- 积分账户记录 + 积分账户记录总数量 -->
+	<select id="queryJfAccountRecordsTotalNum" resultType="Integer"
+		parameterType="com.sxsram.ssm.entity.UserExpandQueryVo">
+		select
+		COUNT(*)
+		from
+		t_user u join t_jf_account da on u.id =
+		da.userId
+		join
+		t_jf_record dr
+		on da.id = dr.accountId
+		where
+		u.id =
+		#{id}
+		<if test="pagination != null">
+			<if test="pagination.orderByCols != null">
+				order by ${pagination.orderByCols}
+			</if>
+			<if test="pagination.limitStart != null">
+				limit #{pagination.limitStart},#{pagination.limitNum}
+			</if>
+		</if>
+	</select>
+
+	<select id="queryAllJfRecords" resultType="com.sxsram.ssm.entity.AccountRecordExpand"
+		parameterType="com.sxsram.ssm.entity.UserExpandQueryVo">
+		select
+		dr.*
+		from
+		t_user u join t_jf_account da on u.id =
+		da.userId
+		join
+		t_jf_record dr on da.id = dr.accountId
+		where
+		u.id =
+		#{id}
+		<if test="pagination != null">
+			<if test="pagination.orderByCols != null">
+				order by ${pagination.orderByCols}
+			</if>
+			<if test="pagination.limitStart != null">
+				limit #{pagination.limitStart},#{pagination.limitNum}
+			</if>
+		</if>
+	</select>
+
+	<!-- 养老金账户记录 + 养老金账户记录总数量 -->
+	<select id="queryYljAccountRecordsTotalNum" resultType="Integer"
+		parameterType="com.sxsram.ssm.entity.UserExpandQueryVo">
+		select
+		COUNT(*)
+		from
+		t_user u join t_ylj_account da on u.id =
+		da.userId
+		join
+		t_ylj_record
+		dr on da.id = dr.accountId
+		where
+		u.id =
+		#{id}
+		<if test="pagination != null">
+			<if test="pagination.orderByCols != null">
+				order by ${pagination.orderByCols}
+			</if>
+			<if test="pagination.limitStart != null">
+				limit #{pagination.limitStart},#{pagination.limitNum}
+			</if>
+		</if>
+	</select>
+	<select id="queryAllYljRecords" resultType="com.sxsram.ssm.entity.AccountRecordExpand"
+		parameterType="com.sxsram.ssm.entity.UserExpandQueryVo">
+		select
+		dr.*
+		from
+		t_user u join t_ylj_account da on u.id =
+		da.userId
+		join
+		t_ylj_record dr on da.id = dr.accountId
+		where
+		u.id =
+		#{id}
+		<if test="pagination != null">
+			<if test="pagination.orderByCols != null">
+				order by ${pagination.orderByCols}
+			</if>
+			<if test="pagination.limitStart != null">
+				limit #{pagination.limitStart},#{pagination.limitNum}
+			</if>
+		</if>
+	</select>
+
+	<!-- 养老金转存记录 + 养老金转存记录总数量 -->
+	<select id="queryYljTransferRecordsTotalNum" resultType="Integer"
+		parameterType="com.sxsram.ssm.entity.UserExpandQueryVo">
+		select
+		COUNT(*)
+		from
+		t_user u join t_ylj_account da on u.id =
+		da.userId
+		join
+		t_ylj_record dr on da.id = dr.accountId
+		where
+		u.id =
+		#{id} and
+		dr.operation = 1
+		<if test="pagination != null">
+			<if test="pagination.orderByCols != null">
+				order by ${pagination.orderByCols}
+			</if>
+			<if test="pagination.limitStart != null">
+				limit #{pagination.limitStart},#{pagination.limitNum}
+			</if>
+		</if>
+	</select>
+	<select id="queryAllYljTransferRecords" resultType="com.sxsram.ssm.entity.AccountRecordExpand"
+		parameterType="com.sxsram.ssm.entity.UserExpandQueryVo">
+		select
+		dr.*
+		from
+		t_user u join t_ylj_account da on u.id =
+		da.userId
+		join
+		t_ylj_record dr on da.id = dr.accountId
+		where
+		u.id =
+		#{id} and
+		dr.operation = 1
+		<if test="pagination != null">
+			<if test="pagination.orderByCols != null">
+				order by ${pagination.orderByCols}
+			</if>
+			<if test="pagination.limitStart != null">
+				limit #{pagination.limitStart},#{pagination.limitNum}
+			</if>
+		</if>
+	</select>
+
+	<!-- 线下消费记录 + 线下消费记录总数量 -->
+	<select id="queryJournalBookRecordsTotalNumByClientId"
+		resultType="Integer" parameterType="com.sxsram.ssm.entity.UserExpandQueryVo">
+		select
+		COUNT(*)
+		from
+		t_journal_book jb
+		join t_user b on jb.businessId =
+		b.id
+		join t_user
+		c on jb.clientId =
+		c.id
+		left join t_user r on jb.rewardId
+		= r.id
+		where
+		c.id = #{id}
+		<if test="pagination != null">
+			<if test="pagination.orderByCols != null">
+				order by ${pagination.orderByCols}
+			</if>
+			<if test="pagination.limitStart != null">
+				limit #{pagination.limitStart},#{pagination.limitNum}
+			</if>
+		</if>
+	</select>
+	<select id="queryAllJournalBookRecordsByClientId" resultMap="queryJournalBooksMap"
+		parameterType="com.sxsram.ssm.entity.UserExpandQueryVo">
+		select
+		jb.*,b.username as busername,b.phone as
+		bphone,c.username as
+		cusername,c.phone as
+		cphone,r.username,r.phone
+		from
+		t_journal_book jb
+		join t_user b on jb.businessId = b.id
+		join t_user
+		c on jb.clientId =
+		c.id
+		left join t_user r on jb.rewardId = r.id
+		where
+		c.id = #{id}
+		<if test="pagination != null">
+			<if test="pagination.orderByCols != null">
+				order by ${pagination.orderByCols}
+			</if>
+			<if test="pagination.limitStart != null">
+				limit #{pagination.limitStart},#{pagination.limitNum}
+			</if>
+		</if>
+	</select>
+
+	<!-- 线上消费记录 + 线上消费记录总数量 -->
+	<select id="queryOnlineConsumeRecordsTotalNum" resultType="Integer"
+		parameterType="com.sxsram.ssm.entity.UserExpandQueryVo">
+		select
+		COUNT(*)
+		from
+		t_online_journal
+		where
+		status =
+		0
+		and
+		userId = #{id}
+		<if test="pagination != null">
+			<if test="pagination.orderByCols != null">
+				order by ${pagination.orderByCols}
+			</if>
+			<if test="pagination.limitStart != null">
+				limit #{pagination.limitStart},#{pagination.limitNum}
+			</if>
+		</if>
+	</select>
+	<resultMap type="com.sxsram.ssm.entity.OnlineJournalBookItem"
+		id="onlineConsumeRecordMap">
+		<id column="id" property="id" />
+		<result column="amount" property="amount" />
+		<result column="num" property="num" />
+		<association property="onlineJournalBook"
+			javaType="com.sxsram.ssm.entity.OnlineJournalBook">
+			<id column="jourId" property="id" />
+			<result column="journalTime" property="journalTime" />
+		</association>
+		<association property="onlineCommodityModel"
+			javaType="com.sxsram.ssm.entity.OnlineCommodityModel">
+			<id column="modelId" property="id" />
+			<result column="commodityModel" property="commodityModel" />
+			<result column="commodityPrice" property="commodityPrice" />
+			<association property="onlineCommodity"
+				javaType="com.sxsram.ssm.entity.OnlineCommodity">
+				<id column="commId" property="id" />
+				<result column="commodityName" property="commodityName" />
+				<result column="commodityMainPic" property="commodityMainPic" />
+			</association>
+		</association>
+	</resultMap>
+	<select id="queryOnlineConsumeRecord" resultMap="onlineConsumeRecordMap"
+		parameterType="com.sxsram.ssm.entity.UserExpandQueryVo">
+		select
+		jour.id as jourId,jour.journalTime,
+		item.id,item.num,item.amount,
+		model.id as
+		modelId,model.commodityModel,model.commodityPrice,
+		comm.id
+		as
+		commId,comm.commodityName,comm.commodityMainPic
+		from
+		t_online_journal
+		jour
+		join t_indent_details item on item.journalId = jour.id
+		join
+		t_online_commodity_model model on item.commodityModelId = model.id
+		join t_online_commodity comm on model.commodityId = comm.id
+		where
+		jour.userId = #{id}
+		<if test="pagination != null">
+			<if test="pagination.orderByCols != null">
+				order by ${pagination.orderByCols}
+			</if>
+			<if test="pagination.limitStart != null">
+				limit #{pagination.limitStart},#{pagination.limitNum}
+			</if>
+		</if>
+	</select>
+
+	<select id="queryMultiRecvCommodityAddress" resultType="com.sxsram.ssm.entity.RecvCommodityAddress"
+		parameterType="com.sxsram.ssm.entity.RecvCommodityAddressQueryVo">
+		select
+		id,province,city,area,extra,phone,contacts,isDefault,userId
+		from
+		t_recv_commodity_address
+		where
+		flag = 0
+		<if test="queryCondition != null">
+			<if test="queryCondition.whereCond != null">
+				and ${queryCondition.whereCond}
+			</if>
+		</if>
+		<if test="pagination != null">
+			<if test="pagination.orderByCols != null">
+				order by ${pagination.orderByCols}
+			</if>
+			<if test="pagination.limitStart != null">
+				limit #{pagination.limitStart},#{pagination.limitNum}
+			</if>
+		</if>
+	</select>
+
+	<select id="querySingleRecvCommodityAddress" resultType="com.sxsram.ssm.entity.RecvCommodityAddress"
+		parameterType="com.sxsram.ssm.entity.RecvCommodityAddressQueryVo">
+		select
+		id,province,city,area,extra,phone,contacts,isDefault,userId
+		from
+		t_recv_commodity_address
+		where
+		flag = 0
+		<if test="queryCondition != null">
+			<if test="queryCondition.whereCond != null">
+				and ${queryCondition.whereCond}
+			</if>
+		</if>
+		<if test="pagination != null">
+			<if test="pagination.orderByCols != null">
+				order by ${pagination.orderByCols}
+			</if>
+			<if test="pagination.limitStart != null">
+				limit #{pagination.limitStart},#{pagination.limitNum}
+			</if>
+		</if>
+	</select>
+
+	<insert id="addNewRecvCommodityAddress" parameterType="com.sxsram.ssm.entity.RecvCommodityAddress">
+		<selectKey keyProperty="id" order="AFTER" resultType="int">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into
+		t_recv_commodity_address(province,city,area,extra,phone,contacts,userId)
+		values(#{province},#{city},#{area},#{extra},#{phone},#{contacts},#{user.id})
+	</insert>
+
+	<delete id="delRecvCommodityAddress" parameterType="Integer">
+		update
+		t_recv_commodity_address set flag = 1 where id = #{id}
+	</delete>
+
+	<update id="updateRecvCommodityAddress" parameterType="com.sxsram.ssm.entity.RecvCommodityAddressQueryVo">
+		update t_recv_commodity_address
+		<trim prefix="set" suffixOverrides=",">
+			<if test="province != null">
+				province = #{province},
+			</if>
+			<if test="city != null">
+				city = #{city},
+			</if>
+			<if test="area != null">
+				area = #{area},
+			</if>
+			<if test="extra != null">
+				extra = #{extra},
+			</if>
+			<if test="phone != null">
+				phone = #{phone},
+			</if>
+			<if test="contacts != null">
+				contacts = #{contacts},
+			</if>
+			<if test="isDefault != null">
+				isDefault = #{isDefault},
+			</if>
+			<if test="flag != null">
+				flag = #{flag},
+			</if>
+			<if test="user != null">
+				<if test="user.id != null">
+					userId = #{user.id},
+				</if>
+			</if>
+		</trim>
+		where
+		<if test="queryCondition != null">
+			<if test="queryCondition.whereCond != null">
+				${queryCondition.whereCond}
+			</if>
+		</if>
+	</update>
+
+
+
+	<!-- 聚得币余额、记录操作 -->
+	<select id="queryJdbAccountByUserId" resultType="com.sxsram.ssm.entity.AccountExpand"
+		parameterType="int">
+		select
+		r.*
+		from
+		t_user u join t_jdb_account r on
+		u.jdbAccountId = r.id
+		where
+		u.id = #{userId}
+	</select>
+
+	<update id="updateJdbAccountBalance" parameterType="com.sxsram.ssm.entity.AccountExpand">
+		update
+		t_jdb_account set accountBalance = #{accountBalance} where id =
+		#{id}
+	</update>
+
+	<insert id="insertNewJdbChangeRecord" parameterType="com.sxsram.ssm.entity.AccountRecordExpand">
+		insert into
+		t_jdb_record(operation,operateTime,operateNum,operateDesc,balance,accountId,operateObjId)
+		values(#{operation},now(),#{operateNum},#{operateDesc},#{balance},#{account.id}
+		<if test="operateObj!=null">
+			,#{operateObj.id})
+		</if>
+		<if test="operateObj==null">
+			,null)
+		</if>
+	</insert>
+</mapper>

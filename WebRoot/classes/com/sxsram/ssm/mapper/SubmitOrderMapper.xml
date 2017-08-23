@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sxsram.ssm.mapper.SubmitOrderMapper">
+	<insert id="insertNewJournalBookItem" parameterType="com.sxsram.ssm.entity.JournalBookExpand">
+		<!-- 将插入数据的主键返回，返回到user对象中 keyProperty: 将查询到的主键赋给 parameterType的哪个属性 order: 
+			AFTER，插入之后执行查询 -->
+		<selectKey keyProperty="id" order="AFTER" resultType="int">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into
+		t_journal_book(indentId,businessId,clientId,commodityTypeId,commodityName,amount,premiumRates,giftJf,rewardJf,journalTime,rewardId)
+		values(#{indent.id},#{business.id},#{client.id},
+		#{commodityType.id},#{commodityName},#{amount},#{premiumRates},#{giftJf},#{rewardJf},now()
+		<if test="reward!=null">
+			,#{reward.id})
+		</if>
+		<if test="reward==null">
+			,null)
+		</if>
+	</insert>
+
+	<update id="updateJournalBookFlag" parameterType="com.sxsram.ssm.entity.JournalBookExpand">
+		update
+		t_journal_book set flag = #{flag}
+		where id=#{id}
+	</update>
+
+	<resultMap type="com.sxsram.ssm.entity.JournalBookExpand" id="queryJournalBooksMap">
+		<id column="id" property="id" />
+		<result column="amount" property="amount" />
+		<result column="premiumRates" property="premiumRates" />
+		<result column="commodityName" property="commodityName" />
+		<result column="giftJf" property="giftJf" />
+		<result column="rewardJf" property="rewardJf" />
+		<result column="journalTime" property="journalTime" />
+		<result column="flag" property="flag" />
+		<association property="business" javaType="com.sxsram.ssm.entity.UserExpand">
+			<id column="businessId" property="id" />
+			<result column="busername" property="username" />
+			<result column="bphone" property="phone" />
+		</association>
+		<association property="client" javaType="com.sxsram.ssm.entity.UserExpand">
+			<id column="clientId" property="id" />
+			<result column="cusername" property="username" />
+			<result column="cphone" property="phone" />
+		</association>
+		<association property="reward" javaType="com.sxsram.ssm.entity.UserExpand">
+			<id column="rewardId" property="id" />
+			<result column="username" property="username" />
+			<result column="phone" property="phone" />
+		</association>
+	</resultMap>
+	<select id="queryAllJournalBookRecordsByUserId" resultMap="queryJournalBooksMap"
+		parameterType="int">
+		select
+		jb.*,b.username as busername,b.phone as
+		bphone,c.username as cusername,c.phone as
+		cphone,r.username ,r.phone
+		from
+		t_journal_book jb join t_user b on
+		jb.businessId = b.id
+		join t_user
+		c
+		on jb.clientId = c.id
+		left join t_user
+		r on jb.rewardId = r.id
+		where
+		b.id = #{userId}
+		order by
+		jb.journalTime
+		desc
+		limit
+		0,15
+	</select>
+	<select id="queryAllJournalBookRecordsByClientId" resultMap="queryJournalBooksMap"
+		parameterType="int">
+		select
+		jb.*,b.username as busername,b.phone as
+		bphone,c.username as cusername,c.phone as
+		cphone,r.username,r.phone
+		from
+		t_journal_book jb join t_user b on jb.businessId = b.id
+		join t_user
+		c on jb.clientId = c.id
+		left join t_user r on jb.rewardId = r.id
+		where
+		c.id = #{userId}
+		order by
+		jb.journalTime desc
+		limit
+		0,15
+	</select>
+
+	<select id="queryAllUnVerifyJournalBookRecords" resultMap="queryJournalBooksMap">
+		select
+		jb.*,b.username as busername,b.phone as
+		bphone,c.username as
+		cusername,c.phone as
+		cphone,r.username,r.phone
+		from
+		t_journal_book jb
+		join t_user b on jb.businessId = b.id
+		join t_user
+		c on jb.clientId =
+		c.id
+		left join t_user r on jb.rewardId = r.id
+		where
+		jb.flag = 0 or
+		jb.flag = 3
+		order by
+		jb.journalTime desc
+	</select>
+
+	<select id="queryAllUnVerifyJournalBookRecordsByProxyId" parameterType="int" resultMap="queryJournalBooksMap">
+		select
+		jb.*,b.username as busername,b.phone as
+		bphone,c.username as
+		cusername,c.phone as
+		cphone,r.username,r.phone
+		from
+		t_journal_book jb
+		join t_user b on jb.businessId = b.id
+		join t_user
+		c on jb.clientId =
+		c.id
+		left join t_user r on jb.rewardId = r.id
+		where
+		(jb.flag = 0 or jb.flag = 3) and b.proxy_user_id = #{id}
+		order by
+		jb.journalTime desc
+	</select>
+	
+
+	<select id="queryAllJournalBooks" resultMap="queryJournalBooksMap">
+		select
+		jb.*,b.username as busername,b.phone as
+		bphone,c.username as
+		cusername,c.phone as
+		cphone,r.username,r.phone
+		from
+		t_journal_book jb
+		join t_user b on jb.businessId = b.id
+		join t_user
+		c on jb.clientId =
+		c.id
+		left join t_user r on jb.rewardId = r.id
+		order by
+		jb.journalTime
+		desc
+	</select>
+	<select id="queryAllJournalBooksByProxyId" parameterType="int"
+		resultMap="queryJournalBooksMap">
+		select
+		jb.*,b.username as busername,b.phone as
+		bphone,c.username as cusername,c.phone as
+		cphone,r.username,r.phone
+		from
+		t_journal_book jb join t_user b on jb.businessId = b.id
+		join t_user
+		c on jb.clientId = c.id
+		left join t_user r on jb.rewardId = r.id
+		where b.proxy_user_id = #{id}
+		order
+		by
+		jb.journalTime desc
+	</select>
+	
+	<!-- 
+		20170409
+	 -->
+	 
+	 <select id="queryOfflineOrdersTotalNum" resultType="Integer" parameterType="com.sxsram.ssm.entity.JournalBookExpandQueryVo">
+		select
+		COUNT(*)
+		from
+		t_journal_book jb
+		join t_user business on jb.businessId = business.id
+		join t_user
+		client on jb.clientId =
+		client.id
+		left join t_user reward on jb.rewardId = reward.id
+		where
+		1=1
+		<if test="queryCondition != null">
+			<if test="queryCondition.whereCond != null">
+				and ${queryCondition.whereCond}
+			</if>
+		</if>
+		<if test="pagination != null">
+			<if test="pagination.orderByCols != null">
+				order by ${pagination.orderByCols}
+			</if>
+			<if test="pagination.limitStart != null">
+				limit #{pagination.limitStart},#{pagination.limitNum}
+			</if>
+		</if>
+	</select>
+	 <select id="queryMultiOfflineOrders" resultMap="queryJournalBooksMap" 
+	 	parameterType="com.sxsram.ssm.entity.JournalBookExpandQueryVo">
+		select
+		jb.*,business.username as busername,business.phone as
+		bphone,client.username as
+		cusername,client.phone as
+		cphone,reward.username,reward.phone
+		from
+		t_journal_book jb
+		join t_user business on jb.businessId = business.id
+		join t_user
+		client on jb.clientId =
+		client.id
+		left join t_user reward on jb.rewardId = reward.id
+		where
+		1=1
+		<if test="queryCondition != null">
+			<if test="queryCondition.whereCond != null">
+				and ${queryCondition.whereCond}
+			</if>
+		</if>
+		<if test="pagination != null">
+			<if test="pagination.orderByCols != null">
+				order by ${pagination.orderByCols}
+			</if>
+			<if test="pagination.limitStart != null">
+				limit #{pagination.limitStart},#{pagination.limitNum}
+			</if>
+		</if>
+	</select>
+	
+	 <select id="querySingleOfflineOrder" resultMap="queryJournalBooksMap" 
+	 	parameterType="com.sxsram.ssm.entity.JournalBookExpandQueryVo">
+		select
+		jb.*,business.username as busername,business.phone as
+		bphone,client.username as
+		cusername,client.phone as
+		cphone,reward.username,reward.phone
+		from
+		t_journal_book jb
+		join t_user business on jb.businessId = business.id
+		join t_user
+		client on jb.clientId =
+		client.id
+		left join t_user reward on jb.rewardId = reward.id
+		where
+		1=1
+		<if test="queryCondition != null">
+			<if test="queryCondition.whereCond != null">
+				and ${queryCondition.whereCond}
+			</if>
+		</if>
+		<if test="pagination != null">
+			<if test="pagination.orderByCols != null">
+				order by ${pagination.orderByCols}
+			</if>
+			<if test="pagination.limitStart != null">
+				limit #{pagination.limitStart},#{pagination.limitNum}
+			</if>
+		</if>
+	</select>
+</mapper>

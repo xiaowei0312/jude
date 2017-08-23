@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sxsram.ssm.mapper.MallMapper">
+
+	<resultMap type="com.sxsram.ssm.entity.ShoppingMallExpand"
+		id="queryMallRstMap">
+		<id column="id" property="id" />
+		<result column="mallPos_lat" property="mallPos_lat" />
+		<result column="mallPos_lnt" property="mallPos_lnt" />
+		<result column="mallName" property="mallName" />
+		<result column="mallDesc" property="mallDesc" />
+		<result column="mallMainPicUrl" property="mallMainPicUrl" />
+		<result column="mallPicUrl1" property="mallPicUrl1" />
+		<result column="mallPicUrl2" property="mallPicUrl2" />
+		<result column="mallPicUrl3" property="mallPicUrl3" />
+		<result column="mallPicUrl4" property="mallPicUrl4" />
+		<result column="mallPicUrl5" property="mallPicUrl5" />
+		<result column="mallLinkMan" property="mallLinkMan" />
+		<result column="mallPhone" property="mallPhone" />
+		<result column="mallAddress" property="mallAddress" />
+		<result column="createTime" property="createTime" />
+
+		<association property="user" javaType="com.sxsram.ssm.entity.UserExpand">
+			<id column="user_id" property="id" />
+			<result column="username" property="username" />
+			<result column="phone" property="phone" />
+		</association>
+		<association property="proxyUser" javaType="com.sxsram.ssm.entity.UserExpand">
+			<id column="proxy_user_id" property="id" />
+			<result column="pusername" property="username" />
+			<result column="pphone" property="phone" />
+		</association>
+		<association property="mallType"
+			javaType="com.sxsram.ssm.entity.ShoppingMallType">
+			<id column="mallTypeId" property="id" />
+			<result column="tTypeName" property="typeName" />
+			<result column="tParentId" property="parentId" />
+			<result column="tSequence" property="sequence" />
+		</association>
+	</resultMap>
+
+	<select id="queryAllMallsByProxyId" resultMap="queryMallRstMap"
+		parameterType="int">
+		select
+		m.*,s.username,s.phone,p.username as
+		pusername,p.phone as phone
+		from
+		t_shopping_mall m left join t_user s on
+		m.user_id = s.id
+		left join
+		t_user p on s.proxy_user_id = p.id
+		where
+		s.proxy_user_id =
+		#{proxyId};
+	</select>
+	<select id="queryAllMalls" resultMap="queryMallRstMap">
+		select
+		m.*,s.username,s.phone,p.username as pusername,p.phone as pphone
+		from
+		t_shopping_mall m left join t_user s on m.user_id = s.id
+		left join
+		t_user p on m.proxy_user_id = p.id
+		where locked = 0
+	</select>
+
+	<update id="updateMall" parameterType="com.sxsram.ssm.entity.ShoppingMallExpand">
+		update t_shopping_mall
+		<trim prefix="set" suffixOverrides=",">
+			<if test="mallName != null">
+				mallName = #{mallName},
+			</if>
+			<if test="mallLinkMan != null">
+				mallLinkMan = #{mallLinkMan},
+			</if>
+			<if test="mallPhone != null">
+				mallPhone = #{mallPhone},
+			</if>
+			<if test="mallAddress != null">
+				mallAddress = #{mallAddress},
+			</if>
+			<if test="mallDesc != null">
+				mallDesc = #{mallDesc},
+			</if>
+			<if test="mallMainPicUrl != null">
+				mallMainPicUrl = #{mallMainPicUrl},
+			</if>
+			<if test="mallPicUrl1 != null">
+				mallPicUrl1 = #{mallPicUrl1},
+			</if>
+			<if test="mallPicUrl2 != null">
+				mallPicUrl2 = #{mallPicUrl2},
+			</if>
+			<if test="mallPicUrl3 != null">
+				mallPicUrl3 = #{mallPicUrl3},
+			</if>
+			<if test="mallPicUrl4 != null">
+				mallPicUrl4 = #{mallPicUrl4},
+			</if>
+			<if test="mallPicUrl5 != null">
+				mallPicUrl5 = #{mallPicUrl5},
+			</if>
+			<if test="mallPos_lat != null">
+				mallPos_lat = #{mallPos_lat},
+			</if>
+			<if test="mallPos_lnt != null">
+				mallPos_lnt = #{mallPos_lnt},
+			</if>
+			<if test="locked != null">
+				locked = #{locked},
+			</if>
+			<if test="user != null">
+				<if test="user.id != null">
+					user_id = #{user.id},
+				</if>
+			</if>
+			<if test="proxyUser != null">
+				<if test="proxyUser.id != null">
+					proxy_user_id = #{proxyUser.id},
+				</if>
+			</if>
+			<if test="mallType != null">
+				<if test="mallType.id != null">
+					mallTypeId = #{mallType.id},
+				</if>
+			</if>
+		</trim>
+		<where>
+			id = #{id}
+		</where>
+	</update>
+
+	<!-- parameterType: 指定输入参数类型是POJO，使用#{}指定POJO的属性名，MyBatis通过OGNL获取对象的属性值 -->
+	<insert id="addNewMall" parameterType="com.sxsram.ssm.entity.ShoppingMallExpand">
+		<!-- 将插入数据的主键返回，返回到user对象中 keyProperty: 将查询到的主键赋给 parameterType的哪个属性 order: 
+			AFTER，插入之后执行查询 -->
+		<selectKey keyProperty="id" order="AFTER" resultType="int">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into
+		t_shopping_mall
+		(mallPos_lat,mallPos_lnt,mallName,mallMainPicUrl,
+		mallPicUrl1,mallPicUrl2,mallPicUrl3,mallPicUrl4,mallPicUrl5,mallLinkMan,mallPhone,mallAddress,createTime,user_id,proxy_user_id,mallTypeId)
+		values
+		(
+		<trim suffixOverrides=",">
+			#{mallPos_lat},#{mallPos_lnt},#{mallName},#{mallMainPicUrl},
+			#{mallPicUrl1},#{mallPicUrl2},#{mallPicUrl3},#{mallPicUrl4},#{mallPicUrl5},
+			#{mallLinkMan},#{mallPhone},#{mallAddress},now(),
+			<if test="user != null">
+				#{user.id},
+			</if>
+			<if test="proxyUser != null">
+				#{proxyUser.id},
+			</if>
+			<if test="mallType != null">
+				#{mallType.id},
+			</if>
+		</trim>
+		)
+	</insert>
+
+	<!-- Added at 2017/4/11 -->
+
+	<select id="queryMallListCount" resultType="Integer">
+		select
+		COUNT(*)
+		from
+		t_shopping_mall mall left join t_user user on
+		mall.user_id = user.id
+		left join
+		t_user proxy on mall.proxy_user_id =
+		proxy.id
+		left join
+		t_shopping_mall_type type on mall.mallTypeId =
+		type.id
+		where
+		1=1
+		<if test="queryCondition != null">
+			<if test="queryCondition.whereCond != null">
+				and ${queryCondition.whereCond}
+			</if>
+		</if>
+		<if test="pagination != null">
+			<if test="pagination.orderByCols != null">
+				order by ${pagination.orderByCols}
+			</if>
+			<if test="pagination.limitStart != null">
+				limit #{pagination.limitStart},#{pagination.limitNum}
+			</if>
+		</if>
+	</select>
+
+	<select id="querySingleMall" resultMap="queryMallRstMap">
+		select
+		mall.*,user.username,user.phone,proxy.username as
+		pusername,proxy.phone as pphone,
+		type.typeName as
+		tTypeName,type.sequence as tSequence,type.parentId as
+		tParentId,type.id as tTypeId
+		from
+		t_shopping_mall mall left join t_user user on mall.user_id = user.id
+		left join
+		t_user proxy on mall.proxy_user_id = proxy.id
+		left join
+		t_shopping_mall_type type on mall.mallTypeId = type.id
+		where
+		1=1
+		<if test="queryCondition != null">
+			<if test="queryCondition.whereCond != null">
+				and ${queryCondition.whereCond}
+			</if>
+		</if>
+		<if test="pagination != null">
+			<if test="pagination.orderByCols != null">
+				order by ${pagination.orderByCols}
+			</if>
+			<if test="pagination.limitStart != null">
+				limit #{pagination.limitStart},#{pagination.limitNum}
+			</if>
+		</if>
+	</select>
+
+	<select id="queryMultiMalls" resultMap="queryMallRstMap">
+		select
+		mall.*,user.username,user.phone,proxy.username as
+		pusername,proxy.phone as pphone,
+		type.typeName as
+		tTypeName,type.sequence as tSequence,type.parentId as
+		tParentId,type.id as tTypeId
+		from
+		t_shopping_mall mall left join t_user user on mall.user_id = user.id
+		left join
+		t_user proxy on mall.proxy_user_id = proxy.id
+		left join
+		t_shopping_mall_type type on mall.mallTypeId = type.id
+		where
+		1=1
+		<if test="queryCondition != null">
+			<if test="queryCondition.whereCond != null">
+				and ${queryCondition.whereCond}
+			</if>
+		</if>
+		<if test="pagination != null">
+			<if test="pagination.orderByCols != null">
+				order by ${pagination.orderByCols}
+			</if>
+			<if test="pagination.limitStart != null">
+				limit #{pagination.limitStart},#{pagination.limitNum}
+			</if>
+		</if>
+	</select>
+
+
+	<!-- Type Operation -->
+
+	<select id="queryMultiMallTypes" parameterType="com.sxsram.ssm.entity.ShoppingMallTypeQueryVo"
+		resultType="com.sxsram.ssm.entity.ShoppingMallType">
+		select
+		id,parentId,typeName,sequence
+		from
+		t_shopping_mall_type
+		where
+		1=1
+		<if test="queryCondition != null">
+			<if test="queryCondition.whereCond != null">
+				and ${queryCondition.whereCond}
+			</if>
+		</if>
+		<if test="pagination != null">
+			<if test="pagination.orderByCols != null">
+				order by ${pagination.orderByCols}
+			</if>
+			<if test="pagination.limitStart != null">
+				limit #{pagination.limitStart},#{pagination.limitNum}
+			</if>
+		</if>
+	</select>
+
+	<select id="querySingleMallTypes" parameterType="com.sxsram.ssm.entity.ShoppingMallTypeQueryVo"
+		resultType="com.sxsram.ssm.entity.ShoppingMallType">
+		select
+		id,parentId,typeName,sequence
+		from
+		t_shopping_mall_type
+		where
+		1=1
+		<if test="queryCondition != null">
+			<if test="queryCondition.whereCond != null">
+				and ${queryCondition.whereCond}
+			</if>
+		</if>
+		<if test="pagination != null">
+			<if test="pagination.orderByCols != null">
+				order by ${pagination.orderByCols}
+			</if>
+			<if test="pagination.limitStart != null">
+				limit #{pagination.limitStart},#{pagination.limitNum}
+			</if>
+		</if>
+	</select>
+
+	<select id="queryMallTypesTotalNum" parameterType="com.sxsram.ssm.entity.ShoppingMallTypeQueryVo"
+		resultType="Integer">
+		select
+		count(*)
+		from
+		t_shopping_mall_type
+		where
+		1=1
+		<if test="queryCondition != null">
+			<if test="queryCondition.whereCond != null">
+				and ${queryCondition.whereCond}
+			</if>
+		</if>
+	</select>
+
+	<update id="updateType" parameterType="com.sxsram.ssm.entity.ShoppingMallType">
+		update t_shopping_mall_type
+		<trim prefix="set" suffixOverrides=",">
+			<if test="parentId != null">
+				parentId = #{parentId},
+			</if>
+			<if test="typeName != null">
+				typeName = #{typeName},
+			</if>
+			<if test="sequence != null">
+				sequence = #{sequence},
+			</if>
+		</trim>
+		<where>
+			<if test="id != null">
+				id = #{id}
+			</if>
+		</where>
+	</update>
+
+	<delete id="deleteType" parameterType="com.sxsram.ssm.entity.ShoppingMallType">
+		delete from
+		t_shopping_mall_type where id = #{id}
+	</delete>
+
+	<insert id="insertNewType" parameterType="com.sxsram.ssm.entity.ShoppingMallType">
+		<!-- 将插入数据的主键返回，返回到user对象中 keyProperty: 将查询到的主键赋给 parameterType的哪个属性 order: 
+			AFTER，插入之后执行查询 -->
+		<selectKey keyProperty="id" order="AFTER" resultType="int">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+
+		insert into
+		t_shopping_mall_type(typeName,parentId,sequence)
+		values(#{typeName},#{parentId},#{sequence})
+	</insert>
+</mapper>

@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sxsram.ssm.mapper.NoticeMapper">
+	<insert id="addNewNoticeType" parameterType="com.sxsram.ssm.entity.NoticeType">
+		insert into
+		t_sc_notice_type(parentId,typeName,sequence)
+		values(#{parentId},#{typeName},#{sequence})
+	</insert>
+	
+	<update id="updateNoticeType" parameterType="com.sxsram.ssm.entity.NoticeType">
+		update t_sc_notice_type
+		<trim prefix="set" suffixOverrides=",">
+			<if test="parentId != null">
+				parentId = #{parentId},
+			</if>
+			<if test="typeName != null">
+				typeName = #{typeName},
+			</if>
+			<if test="sequence != null">
+				sequence = #{sequence},
+			</if>
+		</trim>
+		where id = #{id}
+	</update>
+	
+	<delete id="deleteNoticeType" parameterType="Integer">
+		delete from t_sc_notice_type where id = #{id}
+	</delete>
+	
+	<select id="queryNoticeTypeListCount" parameterType="com.sxsram.ssm.entity.NoticeTypeQueryVo" 
+		resultType="Integer">
+		select COUNT(*) from
+		(
+		select
+			COUNT(*)
+		from
+			t_sc_notice_type t left join t_sc_notice n
+				on n.noticeTypeId = t.id
+		where 1=1
+		<if test="queryCondition != null">
+			<if test="queryCondition.whereCond != null">
+				and ${queryCondition.whereCond}
+			</if>
+		</if>
+		group by t.id
+		<if test="pagination != null">
+			<if test="pagination.orderByCols != null">
+				order by ${pagination.orderByCols}
+			</if>
+			<if test="pagination.limitStart != null">
+				limit #{pagination.limitStart},#{pagination.limitNum}
+			</if>
+		</if>
+		)a
+	</select>
+	
+	<resultMap type="com.sxsram.ssm.entity.NoticeType" id="map_noticeTypeAndNotice">
+		<id column="id" property="id" />
+		<result column="typeName" property="typeName" />
+		<result column="sequence" property="sequence" />
+		<collection property="notices" ofType="com.sxsram.ssm.entity.Notice">
+			<id column="noticeId" property="id" />
+			<result column="noticeTitle" property="noticeTitle" />
+			<result column="noticeFileName" property="noticeFileName" />
+			<result column="noticeAddTime" property="noticeAddTime" />
+		</collection>
+	</resultMap>
+	<select id="queryMultiNoticeTypes" parameterType="com.sxsram.ssm.entity.NoticeTypeQueryVo" 
+		resultMap="map_noticeTypeAndNotice">
+		select
+			t.id,t.typeName,t.sequence,n.id as noticeId,n.noticeTitle,n.noticeFileName,n.noticeAddTime
+		from
+		(
+			select * from 
+				t_sc_notice_type
+			where 1=1
+			<if test="queryCondition != null">
+				<if test="queryCondition.whereCond != null">
+					and ${queryCondition.whereCond}
+				</if>
+			</if>
+			<if test="pagination != null">
+				<if test="pagination.orderByCols != null">
+					order by ${pagination.orderByCols}
+				</if>
+				<if test="pagination.limitStart != null">
+					limit #{pagination.limitStart},#{pagination.limitNum}
+				</if>
+			</if>
+		) t left join t_sc_notice n
+				on n.noticeTypeId = t.id
+		
+	</select>
+	
+	<select id="querySingleNoticeType" parameterType="com.sxsram.ssm.entity.NoticeTypeQueryVo" 
+		resultMap="map_noticeTypeAndNotice">
+		select
+			t.id,t.typeName,t.sequence,n.id as noticeId,n.noticeTitle,n.noticeFileName,n.noticeAddTime
+		from
+			t_sc_notice_type t left join t_sc_notice n
+				on n.noticeTypeId = t.id
+		where 1=1
+		<if test="queryCondition != null">
+			<if test="queryCondition.whereCond != null">
+				and ${queryCondition.whereCond}
+			</if>
+		</if>
+		<if test="pagination != null">
+			<if test="pagination.orderByCols != null">
+				order by ${pagination.orderByCols}
+			</if>
+			<if test="pagination.limitStart != null">
+				limit #{pagination.limitStart},#{pagination.limitNum}
+			</if>
+		</if>
+	</select>
+	
+	<!-- 
+		//Notice Operation
+	 -->
+	 <insert id="addNewNotice" parameterType="com.sxsram.ssm.entity.Notice">
+		insert into
+		t_sc_notice(noticeFileName,noticeAddTime,noticeFlag,noticeTypeId,noticeTitle)
+		values(#{noticeFileName},#{noticeAddTime},#{noticeFlag},#{noticeType.id},#{noticeTitle})
+	</insert>
+	
+	<update id="updateNotice" parameterType="com.sxsram.ssm.entity.Notice">
+		update t_sc_notice
+		<trim prefix="set" suffixOverrides=",">
+			<if test="noticeFileName != null">
+				noticeFileName = #{noticeFileName},
+			</if>
+			<if test="noticeAddTime != null">
+				noticeAddTime = #{noticeAddTime},
+			</if>
+			<if test="noticeFlag != null">
+				noticeFlag = #{noticeFlag},
+			</if>
+			<if test="noticeType != null">
+				noticeTypeId = #{noticeType.id},
+			</if>
+			<if test="noticeTitle != null">
+				noticeTitle = #{noticeTitle},
+			</if>
+		</trim>
+		where id = #{id}
+	</update>
+	
+	<delete id="deleteNotice" parameterType="Integer">
+		delete from t_notice where id = #{id}
+	</delete>
+	
+	<select id="queryNoticeListCount" parameterType="com.sxsram.ssm.entity.NoticeQueryVo" 
+		resultType="Integer">
+		select
+			COUNT(*)
+		from
+			t_sc_notice n left join t_sc_notice_type t on n.noticeTypeId = t.id
+		where 1=1
+		<if test="queryCondition != null">
+			<if test="queryCondition.whereCond != null">
+				and ${queryCondition.whereCond}
+			</if>
+		</if>
+		<if test="pagination != null">
+			<if test="pagination.orderByCols != null">
+				order by ${pagination.orderByCols}
+			</if>
+			<if test="pagination.limitStart != null">
+				limit #{pagination.limitStart},#{pagination.limitNum}
+			</if>
+		</if>
+	</select>
+	
+	<resultMap type="com.sxsram.ssm.entity.Notice" id="map_noticeAndNoticeType">
+		<id column="id" property="id" />
+		<result column="noticeTitle" property="noticeTitle" />
+		<result column="noticeFileName" property="noticeFileName" />
+		<result column="noticeFlag" property="noticeFlag" />
+		<result column="noticeAddTime" property="noticeAddTime" />
+		<association property="noticeType" javaType="com.sxsram.ssm.entity.NoticeType">
+			<id column="tid" property="id" />
+			<result column="typeName" property="typeName" />
+			<result column="sequence" property="sequence" />
+		</association>
+	</resultMap>
+	<select id="queryMultiNotices" parameterType="com.sxsram.ssm.entity.NoticeQueryVo" 
+		resultMap="map_noticeAndNoticeType">
+		select
+			n.id,n.noticeTitle,n.noticeFileName,n.noticeAddTime,n.noticeFlag,t.id as tid,t.typeName,t.sequence
+		from
+			t_sc_notice n left join t_sc_notice_type t 
+				on n.noticeTypeId = t.id
+		where 1=1
+		<if test="queryCondition != null">
+			<if test="queryCondition.whereCond != null">
+				and ${queryCondition.whereCond}
+			</if>
+		</if>
+		<if test="pagination != null">
+			<if test="pagination.orderByCols != null">
+				order by ${pagination.orderByCols}
+			</if>
+			<if test="pagination.limitStart != null">
+				limit #{pagination.limitStart},#{pagination.limitNum}
+			</if>
+		</if>
+	</select>
+	
+	<select id="querySingleNotice" parameterType="com.sxsram.ssm.entity.NoticeQueryVo" 
+		resultMap="map_noticeAndNoticeType">
+		select
+			n.id,n.noticeTitle,n.noticeFileName,n.noticeAddTime,n.noticeFlag,t.id as tid,t.typeName,t.sequence
+		from
+			t_sc_notice_type t left join t_sc_notice n
+				on n.noticeTypeId = t.id
+		where 1=1
+		<if test="queryCondition != null">
+			<if test="queryCondition.whereCond != null">
+				and ${queryCondition.whereCond}
+			</if>
+		</if>
+		<if test="pagination != null">
+			<if test="pagination.orderByCols != null">
+				order by ${pagination.orderByCols}
+			</if>
+			<if test="pagination.limitStart != null">
+				limit #{pagination.limitStart},#{pagination.limitNum}
+			</if>
+		</if>
+	</select>
+</mapper>

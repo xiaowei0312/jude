@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sxsram.ssm.mapper.GlobalParamMapper">
+
+	<select id="queryCurrentGlobalParams" resultType="com.sxsram.ssm.entity.GlobalPrams">
+		select
+		*
+		from
+		t_para_config
+		where
+		flag = 0
+	</select>
+	
+	<select id="queryAllGlobalParams" resultType="com.sxsram.ssm.entity.GlobalPrams">
+		select
+		*
+		from
+		t_para_config
+	</select>
+
+	<insert id="insertNewGlobalParam" parameterType="com.sxsram.ssm.entity.GlobalPrams">
+		<!-- 将插入数据的主键返回，返回到user对象中 keyProperty: 将查询到的主键赋给 parameterType的哪个属性 order: 
+			AFTER，插入之后执行查询 -->
+		<selectKey keyProperty="id" order="AFTER" resultType="int">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into
+		t_para_config(cashRatio,yljRatio,totalReCash,cashByOneDlb,
+			vipJfRatio,busJfRatio,oneDlbTotalIncom,
+			checkLimitAmount,beginTime,endTime,flag,
+			withdrawFlag,withdrawUpLimit,inviterSuccessGiftJf,beInviterSuccessGiftJf)
+		values(#{cashRatio},#{yljRatio},#{totalReCash},#{cashByOneDlb},
+			#{vipJfRatio},#{busJfRatio},#{oneDlbTotalIncom},
+			#{checkLimitAmount},now(),null,0,
+			#{withdrawFlag},#{withdrawUpLimit},#{inviterSuccessGiftJf},#{beInviterSuccessGiftJf});
+	</insert>
+
+	<update id="updateGlobalParamFlag" parameterType="com.sxsram.ssm.entity.GlobalPrams">
+		update
+		t_para_config set flag = #{flag} where id=#{id}
+	</update>
+
+	<update id="updateCurrentGlobalParamFlagToDisable">
+		update
+		t_para_config set flag = 1,endTime=now() where
+		flag = 0
+	</update>
+</mapper>

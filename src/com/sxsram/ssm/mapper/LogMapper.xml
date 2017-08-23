@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sxsram.ssm.mapper.LogMapper">
+	<insert id="addLog" parameterType="com.sxsram.ssm.entity.Log">
+		insert into t_log (description,method,type,requestIp,exceptionCode,exceptionDetail,params,createBy,createDate) values
+		(#{description},#{method},#{type},#{requestIp},#{exceptionCode},#{exceptionDetail},#{params},#{createBy.username},#{createDate})
+	</insert>
+</mapper>

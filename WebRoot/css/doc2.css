@@ -1,0 +1,796 @@
+
+.pages {
+	color: #525252;
+	text-align: right;
+	font-family: '微软雅黑'
+}
+
+.m20-b {
+	margin-bottom: 20px;
+	padding: 15px 0 0
+}
+
+.pages .pager {
+	display: inline-block;
+	margin-right: 5px
+}
+
+.pages .text-box {
+	margin: -3px 5px 0;
+	width: 24px;
+	height: 22px;
+	border: 1px solid #d2d2d2;
+	line-height: 22px
+}
+
+.pages .sub-btn,.pages .text-box {
+	vertical-align: middle;
+	text-align: center
+}
+
+.pages .sub-btn {
+	margin: -4px 0 0 5px;
+	width: 25px;
+	height: 25px;
+	border: 0 none;
+	cursor: pointer
+}
+
+.pgEmpty {
+	border: 1px solid #dadbdc!important;
+	color: #dadbdc!important
+}
+
+.pgEmpty:hover {
+	text-decoration: none!important
+}
+
+.list_page {
+	color: #525252;
+	text-align: right;
+	font-family: '微软雅黑'
+}
+
+.list_page a,.list_page span {
+	display: inline-block;
+	margin-left: 5px;
+	padding: 2px 8px;
+	border: 1px solid #d2d2d2;
+	color: #525252
+}
+
+.list_page a:active,.list_page a:hover {
+	text-decoration: underline
+}
+
+.list_page span {
+	border-color: #e53939;
+	background: #e53939;
+	color: #fff
+}
+
+.pager-box {
+	padding: 5px 10px;
+	height: 21px;
+	border: 1px solid #b0b0b0;
+	background-color: #eee
+}
+
+.pager-box .btnArea,.queryBtn .btnArea {
+	float: right;
+	text-align: right;
+	font-size: 9pt;
+	line-height: 30px
+}
+
+.pager-box .input-btnBox {
+	font-size: 9pt
+}
+
+.pager-box .s-pages {
+	margin-top: 0
+}
+
+.pager-box .promptNew {
+	float: left;
+	margin-top: 4px;
+	margin-right: 23px;
+	margin-left: 50px;
+	color: #c40001
+}
+
+.s-pages {
+	float: left;
+	margin-top: 6px;
+	margin-left: 6px;
+	width: 430px;
+	color: #000;
+	font-size: 9pt;
+	line-height: 21px
+}
+
+.s-pages .btn {
+	padding: 0;
+	border: 0
+}
+
+.s-pages a {
+	display: inline-block;
+	overflow: hidden;
+	margin-right: 10px;
+	margin-left: 0;
+	width: 9pt;
+	height: 21px;
+	background: url(http://file.58jude.com/userfiles/images/paging2015.png) no-repeat;
+	color: #e8e8e8;
+	vertical-align: middle
+}
+
+.s-pages .first {
+	background-position: center -1px
+}
+
+.s-pages .first:hover {
+	background-position: center -101px
+}
+
+.s-pages .previous {
+	background-position: center -26px
+}
+
+.s-pages .previous:hover {
+	background-position: center -126px
+}
+
+.s-pages .next {
+	background-position: center -51px
+}
+
+.s-pages .next:hover {
+	background-position: center -151px
+}
+
+.s-pages .last {
+	background-position: center -76px
+}
+
+.s-pages .last:hover {
+	background-position: center -11pc
+}
+
+.s-pages .text {
+	display: inline-block;
+	margin-right: 10px
+}
+
+.s-pages .select-box,.s-pages .text-box {
+	display: inline-block;
+	margin: 0 5px;
+	padding: 0 5px;
+	width: 30px;
+	height: 19px;
+	border: 1px solid #cfcfcf;
+	text-align: center;
+	line-height: 19px
+}
+
+.s-pages .text-box {
+	border-radius: 0;
+	box-shadow: none;
+	text-indent: 0
+}
+
+.s-pages .select-box {
+	padding: 0;
+	width: 50px;
+	height: 21px;
+	vertical-align: middle;
+	line-height: 21px
+}
+/* 
+.formArea {
+	overflow: hidden;
+	width: 100%;
+	font-size: 14px
+}
+
+.formArea table {
+	border: 0
+}
+
+.formArea table tr td {
+	border: 0;
+	font-size: 15px;
+	line-height: 55px
+}
+
+.formArea .submit-btn {
+	width: 180px
+}
+
+.formArea .error_msg {
+	color: red;
+	font-size: 9pt
+}
+
+.formArea .error_msg_new {
+	display: inline-block;
+	padding: 0 5px;
+	width: 260px;
+	height: 2pc;
+	border: 1px solid #ffbdbe;
+	background-color: #ffebeb;
+	color: red;
+	font-size: 9pt;
+	line-height: 2pc
+}
+
+.formArea .info_msg {
+	color: green;
+	font-size: 9pt
+}
+
+.frr {
+	text-align: right
+}
+
+.fll {
+	padding-left: 20px;
+	text-align: left
+}
+
+.r1 {
+	margin-right: 10px;
+	width: 99pt
+}
+
+.r1,.r2 {
+	height: 2pc;
+	border: 1px solid #bbb;
+	color: #333;
+	font-size: 14px;
+	line-height: 2pc
+}
+
+.r2 {
+	padding-left: 5px;
+	width: 300px
+}
+
+.r3 {
+	width: 310px;
+	height: 2pc;
+	border: 1px solid #bbb;
+	color: #333;
+	font-size: 14px;
+	line-height: 2pc
+}
+
+.r4 {
+	width: 151px
+}
+
+.r4,.r5 {
+	padding-left: 5px;
+	height: 2pc;
+	border: 1px solid #bbb;
+	color: #333;
+	font-size: 14px;
+	line-height: 2pc
+}
+
+.r5 {
+	width: 470px
+}
+
+.gailan1 {
+	overflow: hidden;
+	margin-bottom: 20px;
+	padding-top: 20px;
+	padding-left: 26px;
+	background-color: #f3f3f3;
+	color: #333
+}
+
+.gailan1 ul li {
+	float: left;
+	display: block;
+	margin-right: 40px;
+	margin-bottom: 20px;
+	width: 180px;
+	font-size: 14px
+}
+
+.gailan1 ul li span {
+	color: #bd022d
+}
+
+.gailan2 {
+	float: left;
+	overflow: hidden;
+	margin-top: 10px;
+	width: 5in;
+	height: 280px;
+	font-size: 14px
+}
+
+.gailan2,.gailan2 a {
+	color: #444
+}
+
+.gailan2 table tr td {
+	text-align: center;
+	font-size: 9pt
+}
+
+.gailan2 table thead th {
+	background-color: #eee;
+	color: #333;
+	font-weight: 700;
+	font-size: 14px
+}
+
+.gailan3 {
+	overflow: hidden;
+	font-size: 14px
+}
+
+.gailan3 samp {
+	float: left;
+	display: block;
+	margin-right: 3px;
+	width: 6px;
+	height: 20px;
+	background-color: #f5b35b
+}
+
+.gailan3 span {
+	float: right;
+	color: #666
+}
+
+.gailan3 span:hover {
+	color: #f24547
+}
+
+.vip_a2 {
+	float: left;
+	margin-top: 10px;
+	width: 980px;
+	font-size: 14px
+}
+
+.vip_a2,.vip_a2 a {
+	color: #444
+}
+
+.vip_a2 table tr td {
+	border-right: 0
+}
+
+.vip_a2 table {
+	border-left: 1px solid #ccc
+}
+
+.vip_a2 table tr td {
+	height: 30px;
+	text-align: center;
+	font-size: 9pt
+}
+
+.vip_a2 table thead th {
+	background-color: #eee;
+	color: #333;
+	font-weight: 700;
+	font-size: 14px
+}
+
+.vip_a2 table tr td.bornone {
+	border-right: 0
+}
+
+.bankList {
+	padding-top: 10px
+}
+
+.bank {
+	position: relative;
+	float: left;
+	margin-right: 10px;
+	padding: 0 5px;
+	width: 150px;
+	height: 60px;
+	border: 1px solid #ddd
+}
+
+.waringInfo {
+	margin-bottom: 10px;
+	padding: 10px;
+	border: 1px solid #ffdac6;
+	background-color: #ffefe8;
+	font-size: 9pt
+}
+
+.waringTitle {
+	color: #cc5656
+}
+
+.waringContent {
+	color: #ed484c
+}
+
+.remindInfo {
+	padding: 10px;
+	border: 1px solid #edd28b;
+	background: #fffdee
+}
+
+#itemInfo {
+	padding: 20px;
+	border: 1px solid #dfdfdf;
+	background: none repeat scroll 0 0 #fff
+}
+
+#itemInfo .imgInfo {
+	float: left;
+	overflow: hidden;
+	margin-right: 10px;
+	width: 360px
+}
+
+#itemInfo .textInfo {
+	float: left;
+	width: 43pc
+}
+
+#name h1 {
+	overflow: hidden;
+	color: #666;
+	font-weight: 700;
+	font-size: 1pc;
+	font-family: arial,microsoft yahei;
+	line-height: 1.5em
+}
+
+#summary-price,#summary-service {
+	padding-top: 10px;
+	padding-bottom: 10px;
+	height: 30px;
+	background: #f7f7f7;
+	line-height: 30px
+}
+
+#choose .dt,#summary-price .dt,#summary-service .dt {
+	float: left;
+	display: inline;
+	width: 72px;
+	text-align: right
+}
+
+#summary-price .dd,#summary-service .dd {
+	width: 100%
+}
+
+#summary-price .p-price {
+	display: inline-block;
+	color: #e4393c;
+	font-size: 20px
+}
+
+#summary-service {
+	display: block;
+	padding-top: 6px;
+	padding-bottom: 6px
+}
+
+#name .p-ad {
+	color: #e3393c;
+	font-size: 14px;
+	font-family: arial,microsoft yahei;
+	line-height: 20px;
+	word-break: break-all
+}
+
+#itemInfo .imgInfo .b {
+	width: 360px;
+	height: 360px
+}
+
+#itemInfo .imgInfo .b img {
+	width: 358px;
+	height: 358px;
+	border: 1px solid #e8e8e8
+}
+
+.focusList span {
+	float: left;
+	width: 10px;
+	height: 60px;
+	background: url(http://file.58jude.com/userfiles/images/left-btn02.png) no-repeat left center;
+	cursor: pointer
+}
+
+.focusList span.spanR {
+	float: right;
+	width: 10px;
+	height: 60px;
+	background: url(http://file.58jude.com/userfiles/images/right-btn02.png) no-repeat left center;
+	cursor: pointer
+}
+
+#itemInfo .gallery {
+	position: relative;
+	float: left;
+	overflow: hidden;
+	margin-left: 5px;
+	width: 333px;
+	_margin-left: 0;
+	_width: 335px
+}
+
+#itemInfo .gallery ul {
+	position: relative;
+	float: left;
+	width: 625pc
+}
+
+#itemInfo .gallery li {
+	float: left;
+	margin: 0 4px;
+	padding: 8px 3px 3px;
+	width: 52px;
+	height: 53px;
+	background: url(//file.58jude.com/userfiles/images/s-li-bg.png) no-repeat scroll 0 0 transparent
+}
+
+#itemInfo .gallery li.on,#itemInfo .gallery li:hover {
+	background: url(//file.58jude.com/userfiles/images/s-li-bg-hover.png) no-repeat scroll 0 0 transparent
+}
+
+#itemInfo .gallery li img {
+	display: block;
+	width: 52px;
+	height: 53px
+}
+
+#choose .dt {
+	margin-top: 10px;
+	margin-left: -72px
+}
+
+.p-choose-wrap {
+	float: left;
+	padding-top: 10px
+}
+
+.p-choose-wrap .item {
+	position: relative;
+	float: left;
+	margin: 2px 8px 2px 0
+}
+
+.p-choose-wrap .item a {
+	display: block;
+	padding: 1px 5px;
+	height: 30px;
+	border: 1px solid #ccc;
+	background: #fff;
+	text-decoration: none;
+	white-space: nowrap;
+	font-size: 0;
+	line-height: 30px
+}
+
+.p-choose-wrap .item a:hover {
+	padding: 0 4px;
+	border: 2px solid #e4393c
+}
+
+.p-choose-wrap .item a img {
+	display: inline-block;
+	margin: 1px 3px 1px 1px;
+	vertical-align: middle
+}
+
+.p-choose-wrap .item a i {
+	display: inline-block;
+	margin-right: 3px;
+	vertical-align: middle;
+	font-style: normal;
+	font-size: 9pt
+}
+
+.p-choose-wrap .item.selected a {
+	padding: 0 4px;
+	border: 2px solid #e4393c
+}
+
+.p-choose-wrap .item.selected b {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	overflow: hidden;
+	width: 9pt;
+	height: 9pt;
+	background: url(//file.58jude.com/userfiles/images/sel_cur.png) no-repeat
+}
+
+#choose .li {
+	float: left;
+	padding: 5px 0 5px 72px;
+	width: 516px
+}
+
+#choose #choose-btns {
+	padding: 10px 0 8px 10px;
+	width: 578px;
+	border-bottom: 0
+}
+
+.choose-amount {
+	position: relative;
+	overflow: hidden;
+	margin: 8px 10px 0 0;
+	width: 49px;
+	height: 34px;
+	border: 1px solid #ccc
+}
+
+.choose-amount a {
+	right: -1px;
+	overflow: hidden;
+	width: 15px;
+	height: 17px;
+	border: 1px solid #ccc;
+	background: #f1f1f1;
+	color: #666;
+	text-decoration: none;
+	line-height: 17px
+}
+
+.choose-amount a,.choose-amount input {
+	position: absolute;
+	display: block;
+	text-align: center
+}
+
+.choose-amount input {
+	top: 1px;
+	left: 0;
+	width: 31px;
+	height: 2pc;
+	border: 0;
+	line-height: 2pc
+}
+
+.choose-amount a.btn-add {
+	top: -1px
+}
+
+.choose-amount a.btn-reduce {
+	bottom: -1px
+}
+
+#choose-btns .btn {
+	float: left;
+	margin-top: 8px;
+	margin-bottom: 5px;
+	height: 34px
+}
+
+#s-images p img {
+	vertical-align: top
+}
+
+.cart-empty {
+	padding: 5pc 0 90pt;
+	height: 98px;
+	color: #333;
+	line-height: 98px
+}
+
+.cart-empty .message {
+	padding-left: 441px;
+	height: 98px;
+	background: url(//misc.360buyimg.com/user/cart/css/i/no-login-icon.png) 350px 22px no-repeat;
+	font-size: 14px
+}
+
+.cart-empty .message a {
+	color: #e4393c
+}
+
+.search-body {
+	padding: 10px
+}
+
+.search-body .row_item {
+	margin-bottom: 10px;
+	width: 220px;
+	height: 30px
+}
+
+.member-right1 .notice-title {
+	margin-bottom: 15px;
+	height: 150px;
+	border-bottom: 1px dotted #ddd;
+	color: #333;
+	text-align: center;
+	font-size: 20px
+}
+
+.member-right1 .notice-title .notice-main-title {
+	height: 75pt;
+	line-height: 75pt
+}
+
+.member-right1 .notice-title .notice-sub-title {
+	color: #999;
+	font-size: 9pt;
+	line-height: 30px
+}
+
+.member-right1 .notice-area {
+	padding: 0 150px;
+	color: #444;
+	font-size: 14px
+}
+
+.member-right1 .notice-area .notice-content {
+	line-height: 2pc
+}
+
+.table-title .local {
+	color: #333;
+	font-size: 9pt
+}
+
+.nt-header {
+	margin-left: 10px;
+	padding: 20px 0 8px 15px;
+	width: 810px;
+	border-bottom: 1px solid #bf0000;
+	color: #bf0000;
+	font-weight: 400;
+	font-size: 22px
+}
+
+.ntlist-l {
+	float: left;
+	width: 850px
+}
+
+.ntlist-r {
+	float: right;
+	width: 220px
+}
+
+.ntlist-content {
+	margin: 22px 25px 0 22px
+}
+
+.ntlist-rul span {
+	float: right;
+	color: #999;
+	line-height: 35px
+}
+
+.ntlist-rul li {
+	height: 35px;
+	border-bottom: 1px dashed #babcbd;
+	line-height: 35px
+}
+
+.ntlist-rul li a {
+	color: #333;
+	font: 9pt/150% Arial,Tahoma,"宋体"
+}
+
+.ntlist-rul li a:hover {
+	color: #bf0000
+}
+iframe{
+	border: none;
+	width: 100%;
+	overflow-y: hidden;
+} */

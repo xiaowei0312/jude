@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sxsram.ssm.mapper.PermMapper">
+	<select id="queryRolesTotalNum" resultType="Integer" parameterType="com.sxsram.ssm.entity.RoleExpandQueryVo">
+		select
+			COUNT(*)
+		from
+			t_role
+		where
+			1=1
+			<if test="queryCondition != null">
+				<if test="queryCondition.whereCond != null">
+					and ${queryCondition.whereCond}
+				</if>
+			</if>
+			<if test="pagination != null">
+				<if test="pagination.orderByCols != null">
+					order by ${pagination.orderByCols}
+				</if>
+				<if test="pagination.limitStart != null">
+					limit #{pagination.limitStart},#{pagination.limitNum}
+				</if>
+			</if>
+	</select>
+	
+	<select id="querySingleRole" resultType="com.sxsram.ssm.entity.RoleExpand" parameterType="com.sxsram.ssm.entity.RoleExpandQueryVo">
+		select
+		*
+		from
+		t_role
+		where
+			1=1
+			<if test="queryCondition != null">
+				<if test="queryCondition.whereCond != null">
+					and ${queryCondition.whereCond}
+				</if>
+			</if>
+			<if test="pagination != null">
+				<if test="pagination.orderByCols != null">
+					order by ${pagination.orderByCols}
+				</if>
+				<if test="pagination.limitStart != null">
+					limit #{pagination.limitStart},#{pagination.limitNum}
+				</if>
+			</if>
+	</select>
+	
+	<select id="queryMultiRoles" resultType="com.sxsram.ssm.entity.RoleExpand" parameterType="com.sxsram.ssm.entity.RoleExpandQueryVo">
+		select
+		*
+		from
+		t_role
+		where
+			1=1
+			<if test="queryCondition != null">
+				<if test="queryCondition.whereCond != null">
+					and ${queryCondition.whereCond}
+				</if>
+			</if>
+			<if test="pagination != null">
+				<if test="pagination.orderByCols != null">
+					order by ${pagination.orderByCols}
+				</if>
+				<if test="pagination.limitStart != null">
+					limit #{pagination.limitStart},#{pagination.limitNum}
+				</if>
+			</if>
+	</select>
+
+	<update id="updateRole" parameterType="com.sxsram.ssm.entity.RoleExpand">
+		update t_role
+		<trim prefix="set" suffixOverrides=",">
+			<if test="roleName != null">
+				roleName = #{roleName},
+			</if>
+			<if test="roleGrade != null">
+				roleGrade = #{roleGrade},
+			</if>
+			<if test="seqNum != null">
+				seqNum = #{seqNum},
+			</if>
+		</trim>
+		<where>
+			<if test="id != null">
+				id = #{id}
+			</if>
+		</where>
+	</update>
+
+	<delete id="deleteRole" parameterType="com.sxsram.ssm.entity.RoleExpand">
+		delete from
+		t_role where id = #{id}
+	</delete>
+
+	<insert id="insertNewRole" parameterType="com.sxsram.ssm.entity.RoleExpand">
+		<!-- 将插入数据的主键返回，返回到user对象中 keyProperty: 将查询到的主键赋给 parameterType的哪个属性 order: 
+			AFTER，插入之后执行查询 -->
+		<selectKey keyProperty="id" order="AFTER" resultType="int">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+
+		insert into
+		t_role(roleName,roleGrade,seqNum)
+		values(#{roleName},#{roleGrade},#{seqNum})
+	</insert>
+	
+	
+	<!-- 
+		Permission Operation
+	 -->
+	 <select id="queryPermsTotalNum" resultType="Integer" parameterType="com.sxsram.ssm.entity.PermissionExpandQueryVo">
+		select
+			COUNT(*)
+		from
+			t_permission
+		where
+			1=1
+			<if test="queryCondition != null">
+				<if test="queryCondition.whereCond != null">
+					and ${queryCondition.whereCond}
+				</if>
+			</if>
+			<if test="pagination != null">
+				<if test="pagination.orderByCols != null">
+					order by ${pagination.orderByCols}
+				</if>
+				<if test="pagination.limitStart != null">
+					limit #{pagination.limitStart},#{pagination.limitNum}
+				</if>
+			</if>
+	</select>
+	
+	<select id="querySinglePerm" resultType="com.sxsram.ssm.entity.PermissionExpand" parameterType="com.sxsram.ssm.entity.PermissionExpandQueryVo">
+		select
+		*
+		from
+		t_permission
+		where
+			1=1
+			<if test="queryCondition != null">
+				<if test="queryCondition.whereCond != null">
+					and ${queryCondition.whereCond}
+				</if>
+			</if>
+			<if test="pagination != null">
+				<if test="pagination.orderByCols != null">
+					order by ${pagination.orderByCols}
+				</if>
+				<if test="pagination.limitStart != null">
+					limit #{pagination.limitStart},#{pagination.limitNum}
+				</if>
+			</if>
+	</select>
+	
+	<select id="queryMultiPerms" resultType="com.sxsram.ssm.entity.PermissionExpand" parameterType="com.sxsram.ssm.entity.PermissionExpandQueryVo">
+		select
+		*
+		from
+		t_permission
+		where
+			1=1
+			<if test="queryCondition != null">
+				<if test="queryCondition.whereCond != null">
+					and ${queryCondition.whereCond}
+				</if>
+			</if>
+			<if test="pagination != null">
+				<if test="pagination.orderByCols != null">
+					order by ${pagination.orderByCols}
+				</if>
+				<if test="pagination.limitStart != null">
+					limit #{pagination.limitStart},#{pagination.limitNum}
+				</if>
+			</if>
+	</select>
+
+	<update id="updatePerm" parameterType="com.sxsram.ssm.entity.PermissionExpand">
+		update t_permission
+		<trim prefix="set" suffixOverrides=",">
+			<if test="name != null">
+				name = #{name},
+			</if>
+			<if test="operationId != null">
+				operationId = #{operationId},
+			</if>
+		</trim>
+		<where>
+			<if test="id != null">
+				id = #{id}
+			</if>
+		</where>
+	</update>
+
+	<delete id="deletePerm" parameterType="com.sxsram.ssm.entity.PermissionExpand">
+		delete from
+		t_permission where id = #{id}
+	</delete>
+
+	<insert id="insertNewPerm" parameterType="com.sxsram.ssm.entity.PermissionExpand">
+		<!-- 将插入数据的主键返回，返回到user对象中 keyProperty: 将查询到的主键赋给 parameterType的哪个属性 order: 
+			AFTER，插入之后执行查询 -->
+		<selectKey keyProperty="id" order="AFTER" resultType="int">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+
+		insert into
+		t_permission(name,operationId)
+		values(#{name},#{operationId})
+	</insert>
+	
+	<!-- 
+		Operation Operation
+	 -->
+	 <select id="queryOpersTotalNum" resultType="Integer" parameterType="com.sxsram.ssm.entity.OperationExpandQueryVo">
+		select
+			COUNT(*)
+		from
+			t_operation
+		where
+			1=1
+			<if test="queryCondition != null">
+				<if test="queryCondition.whereCond != null">
+					and ${queryCondition.whereCond}
+				</if>
+			</if>
+			<if test="pagination != null">
+				<if test="pagination.orderByCols != null">
+					order by ${pagination.orderByCols}
+				</if>
+				<if test="pagination.limitStart != null">
+					limit #{pagination.limitStart},#{pagination.limitNum}
+				</if>
+			</if>
+	</select>
+	
+	<select id="querySingleOper" resultType="com.sxsram.ssm.entity.OperationExpand" parameterType="com.sxsram.ssm.entity.OperationExpandQueryVo">
+		select
+		*
+		from
+		t_operation
+		where
+			1=1
+			<if test="queryCondition != null">
+				<if test="queryCondition.whereCond != null">
+					and ${queryCondition.whereCond}
+				</if>
+			</if>
+			<if test="pagination != null">
+				<if test="pagination.orderByCols != null">
+					order by ${pagination.orderByCols}
+				</if>
+				<if test="pagination.limitStart != null">
+					limit #{pagination.limitStart},#{pagination.limitNum}
+				</if>
+			</if>
+	</select>
+	
+	<select id="queryMultiOpers" resultType="com.sxsram.ssm.entity.OperationExpand" parameterType="com.sxsram.ssm.entity.OperationExpandQueryVo">
+		select
+		*
+		from
+		t_operation
+		where
+			1=1
+			<if test="queryCondition != null">
+				<if test="queryCondition.whereCond != null">
+					and ${queryCondition.whereCond}
+				</if>
+			</if>
+			<if test="pagination != null">
+				<if test="pagination.orderByCols != null">
+					order by ${pagination.orderByCols}
+				</if>
+				<if test="pagination.limitStart != null">
+					limit #{pagination.limitStart},#{pagination.limitNum}
+				</if>
+			</if>
+	</select>
+
+	<update id="updateOper" parameterType="com.sxsram.ssm.entity.OperationExpand">
+		update t_operation
+		<trim prefix="set" suffixOverrides=",">
+			<if test="name != null">
+				name = #{name},
+			</if>
+			<if test="url != null">
+				url = #{url},
+			</if>
+			<if test="imgUrl != null">
+				imgUrl = #{imgUrl},
+			</if>
+			<if test="style != null">
+				style = #{style},
+			</if>
+			<if test="isMenu != null">
+				isMenu = #{isMenu},
+			</if>
+			<if test="parentId != null">
+				parentId = #{parentId},
+			</if>
+		</trim>
+		<where>
+			<if test="id != null">
+				id = #{id}
+			</if>
+		</where>
+	</update>
+
+	<delete id="deleteOper" parameterType="com.sxsram.ssm.entity.OperationExpand">
+		delete from
+		t_operation where id = #{id}
+	</delete>
+
+	<insert id="insertNewOper" parameterType="com.sxsram.ssm.entity.OperationExpand">
+		<!-- 将插入数据的主键返回，返回到user对象中 keyProperty: 将查询到的主键赋给 parameterType的哪个属性 order: 
+			AFTER，插入之后执行查询 -->
+		<selectKey keyProperty="id" order="AFTER" resultType="int">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+
+		insert into
+		t_operation(name,url,imgUrl,style,seqnum,isMenu,parentId)
+		values(#{name},#{url},#{imgUrl},#{style},#{seqnum},#{isMenu},#{parentId})
+	</insert>
+</mapper>

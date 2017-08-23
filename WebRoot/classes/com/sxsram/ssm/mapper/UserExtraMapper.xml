@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sxsram.ssm.mapper.UserExtraMapper">
+	<!-- parameterType: 指定输入参数类型是POJO，使用#{}指定POJO的属性名，MyBatis通过OGNL获取对象的属性值 -->
+	<insert id="insertNewUserExtra" parameterType="com.sxsram.ssm.entity.UserExtra">
+		<!-- 将插入数据的主键返回，返回到user对象中 keyProperty: 将查询到的主键赋给 parameterType的哪个属性 order: 
+			AFTER，插入之后执行查询 -->
+		<selectKey keyProperty="id" order="AFTER" resultType="int">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into
+		t_user_extra(userId,inviterUserId,giveMoneyFlag,delFlag,extra,addTime,lmtTime)
+		values(#{userId},#{inviterUserId},#{giveMoneyFlag},0,'',now(),now())
+	</insert>
+	
+	<delete id="deleteUserExtra" parameterType="Integer">
+		update t_user_extra set delFlag = 1
+	</delete>
+	
+	<update id="updateUserExtra" parameterType="com.sxsram.ssm.entity.UserExtra">
+		update t_user_extra 
+		<trim prefix="set" suffixOverrides=",">
+			<if test="userId != null">
+				userId = #{userId},
+			</if>
+			<if test="inviterUserId != null">
+				inviterUserId = #{inviterUserId},
+			</if>
+			<if test="giveMoneyFlag != null">
+				giveMoneyFlag = #{giveMoneyFlag},
+			</if>
+			<if test="withdrawLimit != null">
+				withdrawLimit = #{withdrawLimit},
+			</if>
+			<if test="delFlag != null">
+				delFlag = #{delFlag},
+			</if>
+			<if test="extra != null">
+				extra = #{extra},
+			</if>
+			<if test="addTime != null">
+				addTime = #{addTime},
+			</if>
+		</trim>
+		where id=#{id}
+	</update>
+	
+	<select id="querySingleUserExtra" parameterType="com.sxsram.ssm.entity.UserExtraQueryVo" resultMap="map_userExtra">
+		select 
+			e.*,
+			u.username,u.phone,
+			i.username as inviterUsername,i.phone as inviterPhone 
+		from 
+			t_user_extra e join t_user u on e.userId = u.id
+			left join t_user i on e.inviterUserId = i.id
+		where
+		1 = 1
+		<if test="queryCondition != null">
+			<if test="queryCondition.whereCond != null">
+				and ${queryCondition.whereCond}
+			</if>
+		</if>
+		<if test="pagination != null">
+			<if test="pagination.orderByCols != null">
+				order by ${pagination.orderByCols}
+			</if>
+			<if test="pagination.limitStart != null">
+				limit #{pagination.limitStart},#{pagination.limitNum}
+			</if>
+		</if>	
+	</select>
+	
+	<select id="queryMultiUserExtras" parameterType="com.sxsram.ssm.entity.UserExtraQueryVo" resultMap="map_userExtra">
+		select 
+			e.*,
+			u.username,u.phone,
+			i.username as inviterUsername,i.phone as inviterPhone 
+		from 
+			t_user_extra e join t_user u on e.userId = u.id
+			left join t_user i on e.inviterUserId = i.id
+		where
+		1 = 1
+		<if test="queryCondition != null">
+			<if test="queryCondition.whereCond != null">
+				and ${queryCondition.whereCond}
+			</if>
+		</if>
+		<if test="pagination != null">
+			<if test="pagination.orderByCols != null">
+				order by ${pagination.orderByCols}
+			</if>
+			<if test="pagination.limitStart != null">
+				limit #{pagination.limitStart},#{pagination.limitNum}
+			</if>
+		</if>	
+	</select>
+	
+	
+	<select id="queryMultiUserExtrasHasInviter" parameterType="com.sxsram.ssm.entity.UserExtraQueryVo" resultMap="map_userExtra">
+		select 
+			e.*,
+			u.username,u.phone,
+			i.username as inviterUsername,i.phone as inviterPhone 
+		from 
+			t_user_extra e join t_user u on e.userId = u.id
+			join t_user i on e.inviterUserId = i.id
+		where
+		1 = 1
+		<if test="queryCondition != null">
+			<if test="queryCondition.whereCond != null">
+				and ${queryCondition.whereCond}
+			</if>
+		</if>
+		<if test="pagination != null">
+			<if test="pagination.orderByCols != null">
+				order by ${pagination.orderByCols}
+			</if>
+			<if test="pagination.limitStart != null">
+				limit #{pagination.limitStart},#{pagination.limitNum}
+			</if>
+		</if>	
+	</select>
+	
+	<resultMap type="com.sxsram.ssm.entity.UserExtra" id="map_userExtra" autoMapping="true">
+		<id column="id" property="id" />
+		<association property="user" javaType="com.sxsram.ssm.entity.User" autoMapping="true">
+			<id column="userId" property="id"/>
+		</association>
+		<association property="inviterUser" javaType="com.sxsram.ssm.entity.User">
+			<id column="inviterUserId" property="id"/>
+			<result column="inviterUsername" property="username" />
+			<result column="inviterPhone" property="phone" />
+		</association>
+	</resultMap>
+	
+	<select id="queryMultiUserInviteNum" parameterType="com.sxsram.ssm.entity.UserExtraQueryVo" resultMap="map_userExtra_inviterNum">
+		select 
+			count(*),i.id,i.username ,i.phone  
+		from 
+			t_user_extra e join t_user u on e.userId = u.id
+			join t_user i on e.inviterUserId = i.id
+		where
+		1 = 1
+		<if test="queryCondition != null">
+			<if test="queryCondition.whereCond != null">
+				and ${queryCondition.whereCond}
+			</if>
+		</if>
+		group by 
+			e.inviterUserId
+		<if test="pagination != null">
+			<if test="pagination.orderByCols != null">
+				order by ${pagination.orderByCols}
+			</if>
+			<if test="pagination.limitStart != null">
+				limit #{pagination.limitStart},#{pagination.limitNum}
+			</if>
+		</if>	
+	</select>
+	
+	<resultMap type="com.sxsram.ssm.entity.UserExtra" id="map_userExtra_inviterNum">
+		<id column="id" property="id"/>
+		<result column="count(*)" property="inviterNum"/>
+		<association property="inviterUser" javaType="com.sxsram.ssm.entity.User">
+			<id column="id" property="id"/>
+			<result column="username" property="username" />
+			<result column="phone" property="phone" />
+		</association>
+	</resultMap>
+</mapper>

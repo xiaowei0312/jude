@@ -1,0 +1,511 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sxsram.ssm.mapper.CommodityMapper">
+	<select id="queryOnlineCommodityTypes" resultType="com.sxsram.ssm.entity.OnlineCommodityType">
+		select
+		id,typeName
+		from
+		t_online_commodity_type
+		where
+		parentId is null
+		order by
+		sequence
+	</select>
+
+	<resultMap type="com.sxsram.ssm.entity.NoticeType" id="map_noticeTypeAndNotice">
+		<id column="id" property="id" />
+		<result column="typeName" property="typeName" />
+		<collection property="notices" ofType="com.sxsram.ssm.entity.Notice">
+			<id column="noticeId" property="id" />
+			<result column="noticeTitle" property="noticeTitle" />
+			<result column="noticeFileName" property="noticeFileName" />
+			<result column="noticeAddTime" property="noticeAddTime" />
+		</collection>
+	</resultMap>
+	<select id="queryNoticeTypes" resultMap="map_noticeTypeAndNotice">
+		select
+		t.id,t.typeName,n.id as
+		noticeId,n.noticeTitle,n.noticeFileName,n.noticeAddTime
+		from
+		t_sc_notice_type t left join t_sc_notice n
+		on n.noticeTypeId = t.id and
+		n.noticeFlag = 0
+		order by
+		t.sequence
+	</select>
+
+	<resultMap type="com.sxsram.ssm.entity.OnlineCommodity" id="map_onlineCommodityAndModels">
+		<id column="id" property="id" />
+		<result column="commodityName" property="commodityName" />
+		<result column="commodityMainPic" property="commodityMainPic" />
+		<result column="commodityDetailFileName" property="commodityDetailFileName" />
+		<result column="commoditySequence" property="commoditySequence" />
+		<result column="onlineCommodityFlag" property="onlineCommodityFlag" />
+		<result column="onLineCommodityPutawayTime" property="onLineCommodityPutawayTime" />
+		<result column="onLineCommoditySoldoutTime" property="onLineCommoditySoldoutTime" />
+		<association property="commodityType"
+			javaType="com.sxsram.ssm.entity.OnlineCommodityType">
+			<id column="tid" property="id" />
+			<result column="typeName" property="typeName" />
+		</association>
+		<collection property="commodityModels"
+			ofType="com.sxsram.ssm.entity.OnlineCommodityModel">
+			<id column="mid" property="id" />
+			<result column="commodityModel" property="commodityModel" />
+			<result column="commodityPrice" property="commodityPrice" />
+			<result column="commodityDesc" property="commodityDesc" />
+			<result column="commodityService" property="commodityService" />
+			<result column="commodityRepertory" property="commodityRepertory" />
+			<result column="commodityFlag" property="commodityFlag" />
+			<result column="commoditySalesVolume" property="commoditySalesVolume" />
+			<result column="commodityPutawayTime" property="commodityPutawayTime" />
+			<result column="commoditySoldoutTime" property="commoditySoldoutTime" />
+			<result column="commoditySmallPic1" property="commoditySmallPic1" />
+			<result column="commoditySmallPic2" property="commoditySmallPic2" />
+			<result column="commoditySmallPic3" property="commoditySmallPic3" />
+			<result column="commoditySmallPic4" property="commoditySmallPic4" />
+			<result column="commoditySmallPic5" property="commoditySmallPic5" />
+			<result column="isDefaultModel" property="isDefaultModel" />
+		</collection>
+	</resultMap>
+	<select id="queryOnlineCommodities" parameterType="com.sxsram.ssm.entity.OnLineCommodityQueryVo"
+		resultMap="map_onlineCommodityAndModels">
+		select
+		c.id,c.commodityName,c.commodityMainPic,c.commodityDetailFileName,
+		m.id as
+		mid,m.commodityModel,m.commodityPrice,m.commodityDesc,m.commodityService,
+		m.commodityRepertory,m.commodityFlag,m.commoditySalesVolume,m.commodityPutawayTime,m.commoditySoldoutTime,
+		m.commoditySmallPic1,m.commoditySmallPic2,m.commoditySmallPic3,m.commoditySmallPic4,m.commoditySmallPic5,
+		m.isDefaultModel
+		from
+		t_online_commodity c join t_online_commodity_model
+		m
+		on c.id = m.commodityId and m.commodityFlag = 0 and m.isDefaultModel
+		= 1
+		<if test="pagination != null">
+			<if test="pagination.orderByCols != null">
+				order by ${pagination.orderByCols}
+			</if>
+			<if test="pagination.limitStart != null">
+				limit #{pagination.limitStart},#{pagination.limitNum}
+			</if>
+		</if>
+	</select>
+
+	<select id="queryMultiOnlineCommodities" parameterType="com.sxsram.ssm.entity.OnLineCommodityQueryVo"
+		resultMap="map_onlineCommodityAndModels">
+		select
+		c.id,c.commodityName,c.commodityMainPic,c.commodityDetailFileName,c.commoditySequence,c.onlineCommodityFlag,
+		c.onLineCommodityPutawayTime,c.onLineCommoditySoldoutTime,
+		t.id as
+		tid,t.typeName,
+		m.id as
+		mid,m.commodityModel,m.commodityPrice,m.commodityDesc,m.commodityService,
+		m.commodityRepertory,m.commodityFlag,m.commoditySalesVolume,m.commodityPutawayTime,m.commoditySoldoutTime,
+		m.commoditySmallPic1,m.commoditySmallPic2,m.commoditySmallPic3,m.commoditySmallPic4,m.commoditySmallPic5,
+		m.isDefaultModel
+		from
+		(
+		select * from t_online_commodity
+		where
+		1 = 1
+		<if test="queryCondition != null">
+			<if test="queryCondition.whereCond != null">
+				and ${queryCondition.whereCond}
+			</if>
+		</if>
+		<if test="pagination != null">
+			<if test="pagination.orderByCols != null">
+				order by ${pagination.orderByCols}
+			</if>
+			<if test="pagination.limitStart != null">
+				limit #{pagination.limitStart},#{pagination.limitNum}
+			</if>
+		</if>
+		) c left join t_online_commodity_model
+		m
+		on c.id = m.commodityId join
+		t_online_commodity_type t on
+		c.commodityTypeId = t.id
+
+	</select>
+
+
+	<select id="queryOnlineCommodityById" parameterType="com.sxsram.ssm.entity.OnLineCommodityQueryVo"
+		resultMap="map_onlineCommodityAndModels">
+		select
+		c.id,c.commodityName,c.commodityMainPic,c.commodityDetailFileName,
+		m.id as
+		mid,m.commodityModel,m.commodityPrice,m.commodityDesc,m.commodityService,
+		m.commodityRepertory,m.commodityFlag,m.commoditySalesVolume,m.commodityPutawayTime,m.commoditySoldoutTime,
+		m.commoditySmallPic1,m.commoditySmallPic2,m.commoditySmallPic3,m.commoditySmallPic4,m.commoditySmallPic5,
+		m.isDefaultModel
+		from
+		t_online_commodity c join t_online_commodity_model
+		m
+		on c.id = m.commodityId and m.commodityFlag = 0
+		where
+		c.id = #{id}
+		<if test="pagination != null">
+			<if test="pagination.orderByCols != null">
+				order by ${pagination.orderByCols}
+			</if>
+			<if test="pagination.limitStart != null">
+				limit #{pagination.limitStart},#{pagination.limitNum}
+			</if>
+		</if>
+	</select>
+
+	<select id="queryOnlineCommoditiesByCatId" parameterType="com.sxsram.ssm.entity.OnLineCommodityQueryVo"
+		resultMap="map_onlineCommodityAndModels">
+		select
+		c.id,c.commodityName,c.commodityMainPic,c.commodityDetailFileName,
+		m.id as
+		mid,m.commodityModel,m.commodityPrice,m.commodityDesc,m.commodityService,
+		m.commodityRepertory,m.commodityFlag,m.commoditySalesVolume,m.commodityPutawayTime,m.commoditySoldoutTime,
+		m.commoditySmallPic1,m.commoditySmallPic2,m.commoditySmallPic3,m.commoditySmallPic4,m.commoditySmallPic5,
+		m.isDefaultModel
+		from
+		t_online_commodity c join t_online_commodity_model
+		m
+		on c.id = m.commodityId
+		where
+		m.commodityFlag = 0 and m.isDefaultModel
+		= 1
+		<if test="queryCondition != null">
+			<if test="queryCondition.whereCond != null">
+				and ${queryCondition.whereCond}
+			</if>
+		</if>
+		<if test="pagination != null">
+			<if test="pagination.orderByCols != null">
+				order by ${pagination.orderByCols}
+			</if>
+			<if test="pagination.limitStart != null">
+				limit #{pagination.limitStart},#{pagination.limitNum}
+			</if>
+		</if>
+	</select>
+
+	<select id="queryOnlineCommoditiesTotalNumByCatId"
+		parameterType="com.sxsram.ssm.entity.OnLineCommodityQueryVo"
+		resultType="Integer">
+		select
+		COUNT(*)
+		from
+		t_online_commodity c join t_online_commodity_model m
+		on c.id = m.commodityId
+		where
+		m.commodityFlag = 0 and m.isDefaultModel =
+		1
+		<if test="queryCondition != null">
+			<if test="queryCondition.whereCond != null">
+				and ${queryCondition.whereCond}
+			</if>
+		</if>
+		<if test="pagination != null">
+			<if test="pagination.orderByCols != null">
+				order by ${pagination.orderByCols}
+			</if>
+			<if test="pagination.limitStart != null">
+				limit #{pagination.limitStart},#{pagination.limitNum}
+			</if>
+		</if>
+	</select>
+
+	<select id="queryOnlineCommoditiesTotalNum" parameterType="com.sxsram.ssm.entity.OnLineCommodityQueryVo"
+		resultType="Integer">
+		select
+		COUNT(*)
+		from
+		t_online_commodity
+		where
+		1=1
+		<if test="queryCondition != null">
+			<if test="queryCondition.whereCond != null">
+				and ${queryCondition.whereCond}
+			</if>
+		</if>
+	</select>
+
+
+	<resultMap type="com.sxsram.ssm.entity.OnlineCommodityModel"
+		id="map_onlineCommodityModel">
+		<id column="id" property="id" />
+		<result column="commodityModel" property="commodityModel" />
+		<result column="commodityPrice" property="commodityPrice" />
+		<result column="commodityDesc" property="commodityDesc" />
+		<result column="commodityService" property="commodityService" />
+		<result column="commodityRepertory" property="commodityRepertory" />
+		<result column="commodityFlag" property="commodityFlag" />
+		<result column="commoditySalesVolume" property="commoditySalesVolume" />
+		<result column="commodityPutawayTime" property="commodityPutawayTime" />
+		<result column="commoditySoldoutTime" property="commoditySoldoutTime" />
+		<result column="commoditySmallPic1" property="commoditySmallPic1" />
+		<result column="commoditySmallPic2" property="commoditySmallPic2" />
+		<result column="commoditySmallPic3" property="commoditySmallPic3" />
+		<result column="commoditySmallPic4" property="commoditySmallPic4" />
+		<result column="commoditySmallPic5" property="commoditySmallPic5" />
+		<result column="isDefaultModel" property="isDefaultModel" />
+		<association property="onlineCommodity"
+			javaType="com.sxsram.ssm.entity.OnlineCommodity">
+			<id column="cid" property="id" />
+			<result column="commodityName" property="commodityName" />
+			<result column="commodityMainPic" property="commodityMainPic" />
+			<result column="commodityDetailFileName" property="commodityDetailFileName" />
+		</association>
+	</resultMap>
+	<select id="queryOnlineCommodityModelById" parameterType="Integer"
+		resultMap="map_onlineCommodityModel">
+		select
+		m.id,m.commodityModel,m.commodityPrice,m.commodityDesc,m.commodityService,
+		m.commodityRepertory,m.commodityFlag,m.commoditySalesVolume,m.commodityPutawayTime,m.commoditySoldoutTime,
+		m.commoditySmallPic1,m.commoditySmallPic2,m.commoditySmallPic3,m.commoditySmallPic4,m.commoditySmallPic5,
+		m.isDefaultModel,
+		c.id as
+		cid,c.commodityName,c.commodityMainPic,c.commodityDetailFileName
+		from
+		t_online_commodity_model m join t_online_commodity c
+		on m.commodityId =
+		c.id and m.commodityFlag = 0
+		where
+		m.id = #{id}
+	</select>
+
+	<select id="queryMultiOnlineTypes" parameterType="com.sxsram.ssm.entity.OnLineCommodityTypeQueryVo"
+		resultType="com.sxsram.ssm.entity.OnlineCommodityType">
+		select
+		id,parentId,typeName,sequence
+		from
+		t_online_commodity_type
+		where
+		1=1
+		<if test="queryCondition != null">
+			<if test="queryCondition.whereCond != null">
+				and ${queryCondition.whereCond}
+			</if>
+		</if>
+		<if test="pagination != null">
+			<if test="pagination.orderByCols != null">
+				order by ${pagination.orderByCols}
+			</if>
+			<if test="pagination.limitStart != null">
+				limit #{pagination.limitStart},#{pagination.limitNum}
+			</if>
+		</if>
+	</select>
+
+	<select id="querySingleOnlineTypes" parameterType="com.sxsram.ssm.entity.OnLineCommodityTypeQueryVo"
+		resultType="com.sxsram.ssm.entity.OnlineCommodityType">
+		select
+		id,parentId,typeName,sequence
+		from
+		t_online_commodity_type
+		where
+		1=1
+		<if test="queryCondition != null">
+			<if test="queryCondition.whereCond != null">
+				and ${queryCondition.whereCond}
+			</if>
+		</if>
+		<if test="pagination != null">
+			<if test="pagination.orderByCols != null">
+				order by ${pagination.orderByCols}
+			</if>
+			<if test="pagination.limitStart != null">
+				limit #{pagination.limitStart},#{pagination.limitNum}
+			</if>
+		</if>
+	</select>
+
+	<select id="queryOnlineTypesTotalNum" parameterType="com.sxsram.ssm.entity.OnLineCommodityTypeQueryVo"
+		resultType="Integer">
+		select
+		count(*)
+		from
+		t_online_commodity_type
+		where
+		1=1
+		<if test="queryCondition != null">
+			<if test="queryCondition.whereCond != null">
+				and ${queryCondition.whereCond}
+			</if>
+		</if>
+	</select>
+
+	<update id="updateType" parameterType="com.sxsram.ssm.entity.OnlineCommodityType">
+		update t_online_commodity_type
+		<trim prefix="set" suffixOverrides=",">
+			<if test="parentId != null">
+				parentId = #{parentId},
+			</if>
+			<if test="typeName != null">
+				typeName = #{typeName},
+			</if>
+			<if test="sequence != null">
+				sequence = #{sequence},
+			</if>
+		</trim>
+		<where>
+			<if test="id != null">
+				id = #{id}
+			</if>
+		</where>
+	</update>
+
+	<delete id="deleteType" parameterType="com.sxsram.ssm.entity.OnlineCommodityType">
+		delete from
+		t_online_commodity_type where id = #{id}
+	</delete>
+
+	<insert id="insertNewType" parameterType="com.sxsram.ssm.entity.OnlineCommodityType">
+		<!-- 将插入数据的主键返回，返回到user对象中 keyProperty: 将查询到的主键赋给 parameterType的哪个属性 order: 
+			AFTER，插入之后执行查询 -->
+		<selectKey keyProperty="id" order="AFTER" resultType="int">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+
+		insert into
+		t_online_commodity_type(typeName,parentId,sequence)
+		values(#{typeName},#{parentId},#{sequence})
+	</insert>
+
+	<update id="updateCommodity" parameterType="com.sxsram.ssm.entity.OnlineCommodity">
+		update t_online_commodity
+		<trim prefix="set" suffixOverrides=",">
+			<if test="commodityName != null">
+				commodityName = #{commodityName},
+			</if>
+			<if test="commodityMainPic != null">
+				commodityMainPic = #{commodityMainPic},
+			</if>
+			<if test="commoditySequence != null">
+				commoditySequence = #{commoditySequence},
+			</if>
+			<if test="commodityDetailFileName != null">
+				commodityDetailFileName = #{commodityDetailFileName},
+			</if>
+			<if test="onlineCommodityFlag != null">
+				onlineCommodityFlag = #{onlineCommodityFlag},
+			</if>
+			<if test="onLineCommodityPutawayTime != null">
+				onLineCommodityPutawayTime =
+				#{onLineCommodityPutawayTime},
+			</if>
+			<if test="onLineCommoditySoldoutTime != null">
+				onLineCommoditySoldoutTime =
+				#{onLineCommoditySoldoutTime},
+			</if>
+			<if test="commodityTypeId != null">
+				commodityTypeId = #{commodityTypeId},
+			</if>
+		</trim>
+		<where>
+			<if test="id != null">
+				id = #{id}
+			</if>
+		</where>
+	</update>
+
+	<insert id="insertNewCommodity" parameterType="com.sxsram.ssm.entity.OnlineCommodity">
+		<!-- 将插入数据的主键返回，返回到user对象中 keyProperty: 将查询到的主键赋给 parameterType的哪个属性 order: 
+			AFTER，插入之后执行查询 -->
+		<selectKey keyProperty="id" order="AFTER" resultType="int">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+
+		insert into
+		t_online_commodity(commodityName,commodityMainPic,commoditySequence,commodityDetailFileName,onlineCommodityFlag,onLineCommodityPutawayTime,onLineCommoditySoldoutTime,commodityTypeId)
+		values(#{commodityName},#{commodityMainPic},#{commoditySequence},#{commodityDetailFileName},#{onlineCommodityFlag},#{onLineCommodityPutawayTime},#{onLineCommoditySoldoutTime},#{commodityTypeId})
+	</insert>
+	
+	
+	
+	<delete id="deleteCommodityModel" parameterType="Integer">
+		delete from t_online_commodity_model where id = #{id}
+	</delete>
+	<!-- Model Operation -->
+	<update id="updateCommodityModel" parameterType="com.sxsram.ssm.entity.OnlineCommodityModel">
+		update t_online_commodity_model
+		<trim prefix="set" suffixOverrides=",">
+			<if test="commodityModel != null">
+				commodityModel = #{commodityModel},
+			</if>
+			<if test="commodityPrice != null">
+				commodityPrice = #{commodityPrice},
+			</if>
+			<if test="commodityDesc != null">
+				commodityDesc = #{commodityDesc},
+			</if>
+			<if test="commodityService != null">
+				commodityService = #{commodityService},
+			</if>
+			<if test="commodityRepertory != null">
+				commodityRepertory = #{commodityRepertory},
+			</if>
+			<if test="commodityFlag != null">
+				commodityFlag =
+				#{commodityFlag},
+			</if>
+			<if test="commodityPutawayTime != null">
+				commodityPutawayTime =
+				#{commodityPutawayTime},
+			</if>
+			<if test="commoditySoldoutTime != null">
+				commoditySoldoutTime = #{commoditySoldoutTime},
+			</if>
+			<if test="isDefaultModel != null">
+				isDefaultModel = #{isDefaultModel},
+			</if>
+			<if test="commoditySmallPic1 != null">
+				commoditySmallPic1 = #{commoditySmallPic1},
+			</if>
+			<if test="commoditySmallPic2 != null">
+				commoditySmallPic2 = #{commoditySmallPic2},
+			</if>
+			<if test="commoditySmallPic3 != null">
+				commoditySmallPic3 = #{commoditySmallPic3},
+			</if>
+			<if test="commoditySmallPic4 != null">
+				commoditySmallPic4 = #{commoditySmallPic4},
+			</if>
+			<if test="commoditySmallPic5 != null">
+				commoditySmallPic5 = #{commoditySmallPic5},
+			</if>
+			<if test="commodityId != null">
+				commodityId = #{commodityId},
+			</if>
+		</trim>
+		<where>
+			<if test="id != null">
+				id = #{id}
+			</if>
+		</where>
+	</update>
+
+	<insert id="insertNewCommodityModel" parameterType="com.sxsram.ssm.entity.OnlineCommodityModel">
+		<!-- 将插入数据的主键返回，返回到user对象中 keyProperty: 将查询到的主键赋给 parameterType的哪个属性 order: 
+			AFTER，插入之后执行查询 -->
+		<selectKey keyProperty="id" order="AFTER" resultType="int">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+
+		insert into
+		t_online_commodity_model(commodityModel,commodityPrice,commodityDesc,
+			commodityService,commodityRepertory,commodityFlag,
+			commodityPutawayTime,commoditySoldoutTime,isDefaultModel,
+			commoditySmallPic1,commoditySmallPic2,commoditySmallPic3,
+			commoditySmallPic4,commoditySmallPic5,commodityId)
+		values
+			(#{commodityModel},#{commodityPrice},#{commodityDesc},#{commodityService},#{commodityRepertory},
+			#{commodityFlag},#{commodityPutawayTime},#{commoditySoldoutTime},#{isDefaultModel},
+			#{commoditySmallPic1},#{commoditySmallPic2},#{commoditySmallPic3},
+			#{commoditySmallPic4},#{commoditySmallPic5},#{commodityId})
+	</insert>
+</mapper>

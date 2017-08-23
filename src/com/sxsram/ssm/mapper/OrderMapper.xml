@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sxsram.ssm.mapper.OrderMapper">
+	 <insert id="insertNewOrder" parameterType="com.sxsram.ssm.entity.OnlineJournalBook">
+		<!--
+		将插入数据的主键返回，返回到user对象中 keyProperty: 将查询到的主键赋给 parameterType的哪个属性 order: 
+			AFTER，插入之后执行查询
+		-->
+		<selectKey keyProperty="id" order="AFTER" resultType="int">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+
+		insert into
+		t_online_journal(orderNo,totalAmount,receiveType,postage,recvCommodityAddressId,userId,journalTime,status)
+		values(#{orderNo},#{totalAmount},#{receiveType},#{postage},#{recvCommodityAddressId},#{userId},now(),#{status})
+	</insert>
+
+	<insert id="insertNewOrderItem" parameterType="com.sxsram.ssm.entity.OnlineJournalBookItem">
+		<!-- 
+		将插入数据的主键返回，返回到user对象中 keyProperty: 将查询到的主键赋给 parameterType的哪个属性 order: 
+			AFTER，插入之后执行查询
+		-->
+		<selectKey keyProperty="id" order="AFTER" resultType="int">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into
+		t_indent_details(journalId,commodityModelId,num,amount)
+		values(#{journalId},#{commodityModelId},#{num},#{amount})
+	</insert>
+	
+	<update id="updateOrder" parameterType="com.sxsram.ssm.entity.OnlineJournalBook">
+		update t_online_journal 
+		<trim prefix="set" suffixOverrides=",">
+			<if test="orderNo != null">
+				orderNo = #{orderNo},
+			</if>
+			<if test="totalAmount != null">
+				totalAmount = #{totalAmount},
+			</if>
+			<if test="receiveType != null">
+				receiveType = #{receiveType},
+			</if>
+			<if test="postage != null">
+				city = #{postage},
+			</if>
+			<if test="status != null">
+				status = #{status},
+			</if>
+			<if test="journalTime != null">
+				journalTime = #{journalTime},
+			</if>
+			<if test="userId != null">
+				userId = #{userId},
+			</if>
+			<if test="recvCommodityAddressId != null">
+				recvCommodityAddressId = #{recvCommodityAddressId},
+			</if>
+		</trim>
+		<where>
+			<if test="id != null">
+				id = #{id}
+			</if>
+			<if test="id == null">
+				<if test="orderNo != null">
+					orderNo=#{orderNo}
+				</if>
+			</if>
+		</where>
+	</update>
+	
+
+	<resultMap type="com.sxsram.ssm.entity.OnlineJournalBook" id="map_onlineOrder">
+		<id column="jourId" property="id" />
+		<result column="orderNo" property="orderNo" />
+		<result column="totalAmount" property="totalAmount" />
+		<result column="receiveType" property="receiveType" />
+		<result column="postage" property="postage" />
+		<result column="journalTime" property="journalTime" />
+		<result column="status" property="status" />
+		<association property="user" javaType="com.sxsram.ssm.entity.UserExpand">
+			<id column="userId" property="id"/>
+			<result column="username" property="username"/>
+			<result column="userPhone" property="phone"/>
+		</association>
+		<association property="recvCommodityAddress" javaType="com.sxsram.ssm.entity.RecvCommodityAddress">
+			<id column="addrId" property="id"/>
+			<result column="province" property="province"/>
+			<result column="city" property="city"/>
+			<result column="area" property="area"/>
+			<result column="extra" property="extra"/>
+			<result column="phone" property="phone"/>
+			<result column="contacts" property="contacts"/>
+		</association>
+		<collection property="items"
+			ofType="com.sxsram.ssm.entity.OnlineJournalBookItem">
+			<id column="id" property="id" />
+			<result column="num" property="num" />
+			<result column="amount" property="amount" />
+			<association property="onlineCommodityModel"
+				javaType="com.sxsram.ssm.entity.OnlineCommodityModel">
+				<id column="modelId" property="id" />
+				<result column="commodityModel" property="commodityModel" />
+				<result column="commodityPrice" property="commodityPrice" />
+				<association property="onlineCommodity"
+					javaType="com.sxsram.ssm.entity.OnlineCommodity">
+					<id column="commId" property="id" />
+					<result column="commodityName" property="commodityName" />
+					<result column="commodityMainPic" property="commodityMainPic" />
+				</association>
+			</association>
+		</collection>
+	</resultMap>
+
+ 	<select id="querySingleOrder" parameterType="com.sxsram.ssm.entity.OnlineJournalBookQueryVo"
+		resultMap="map_onlineOrder">
+		select
+		jour.id as jourId,jour.journalTime,jour.orderNo,jour.receiveType,jour.postage,jour.totalAmount,jour.status,
+		u.id as userId,u.username,u.phone as userPhone,
+		jour.addrId,jour.province,jour.city,jour.area,jour.addrExtra as extra,jour.phone,jour.contacts,
+		item.id,item.num,item.amount,
+		model.id as
+		modelId,model.commodityModel,model.commodityPrice,
+		comm.id
+		as
+		commId,comm.commodityName,comm.commodityMainPic
+		from
+		(
+			select jour.*,
+				addr.id as addrId,addr.province,addr.city,
+				addr.area,addr.extra as addrExtra,addr.phone,addr.contacts 
+			from t_online_journal jour
+				join t_recv_commodity_address addr on jour.recvCommodityAddressId = addr.id
+			where 1=1
+			<if test="queryCondition != null">
+				<if test="queryCondition.whereCond != null">
+					and ${queryCondition.whereCond}
+				</if>
+			</if>
+			<if test="pagination != null">
+				<if test="pagination.orderByCols != null">
+					order by ${pagination.orderByCols}
+				</if>
+				<if test="pagination.limitStart != null">
+					limit #{pagination.limitStart},#{pagination.limitNum}
+				</if>
+			</if>
+		) jour 
+		join t_user u on jour.userId = u.id
+		join t_indent_details item on item.journalId = jour.id
+		join
+		t_online_commodity_model model on item.commodityModelId = model.id
+		join t_online_commodity comm on model.commodityId = comm.id
+	</select> 
+
+	<select id="queryMultiOrder" parameterType="com.sxsram.ssm.entity.OnlineJournalBookQueryVo"
+		resultMap="map_onlineOrder">
+		select
+		jour.id as jourId,jour.journalTime,jour.orderNo,jour.receiveType,jour.postage,jour.totalAmount,jour.status,
+		u.id as userId,u.username,u.phone as userPhone,
+		jour.addrId,jour.province,jour.city,jour.area,jour.addrExtra as extra,jour.phone,jour.contacts,
+		item.id,item.num,item.amount,
+		model.id as
+		modelId,model.commodityModel,model.commodityPrice,
+		comm.id
+		as
+		commId,comm.commodityName,comm.commodityMainPic
+		from
+		(
+			select jour.*,
+				addr.id as addrId,addr.province,addr.city,
+				addr.area,addr.extra as addrExtra,addr.phone,addr.contacts 
+			from t_online_journal jour
+				join t_recv_commodity_address addr on jour.recvCommodityAddressId = addr.id
+			where 1=1
+			<if test="queryCondition != null">
+				<if test="queryCondition.whereCond != null">
+					and ${queryCondition.whereCond}
+				</if>
+			</if>
+			<if test="pagination != null">
+				<if test="pagination.orderByCols != null">
+					order by ${pagination.orderByCols}
+				</if>
+				<if test="pagination.limitStart != null">
+					limit #{pagination.limitStart},#{pagination.limitNum}
+				</if>
+			</if>
+		) jour 
+		join t_user u on jour.userId = u.id
+		join t_indent_details item on item.journalId = jour.id
+		join
+		t_online_commodity_model model on item.commodityModelId = model.id
+		join t_online_commodity comm on model.commodityId = comm.id
+	</select>
+	
+	<select id="queryOnlineOrdersTotalNum" parameterType="com.sxsram.ssm.entity.OnlineJournalBookQueryVo"
+		resultType="Integer">
+		select
+			count(*)
+		from
+		t_online_journal
+		jour
+		join t_user u on jour.userId = u.id
+		join t_recv_commodity_address addr on jour.recvCommodityAddressId = addr.id
+		join t_indent_details item on item.journalId = jour.id
+		join
+		t_online_commodity_model model on item.commodityModelId = model.id
+		join t_online_commodity comm on model.commodityId = comm.id
+		where 1=1
+		<if test="queryCondition != null">
+			<if test="queryCondition.whereCond != null">
+				and ${queryCondition.whereCond}
+			</if>
+		</if>
+	</select>
+
+	<select id="queryOrderById" parameterType="Integer" resultMap="map_onlineOrder">
+		select
+		jour.id as jourId,jour.journalTime,jour.orderNo,jour.receiveType,jour.postage,jour.totalAmount,jour.status,
+		addr.id as addrId,addr.province,addr.city,addr.area,addr.extra,addr.phone,addr.contacts,
+		item.id,item.num,item.amount,
+		model.id as
+		modelId,model.commodityModel,model.commodityPrice,
+		comm.id
+		as
+		commId,comm.commodityName,comm.commodityMainPic
+		from
+		t_online_journal
+		jour
+		join t_recv_commodity_address addr on jour.recvCommodityAddressId = addr.id
+		join t_indent_details item on item.journalId = jour.id
+		join
+		t_online_commodity_model model on item.commodityModelId = model.id
+		join t_online_commodity comm on model.commodityId = comm.id
+		where
+		jour.id = #{id}
+	</select>
+</mapper>

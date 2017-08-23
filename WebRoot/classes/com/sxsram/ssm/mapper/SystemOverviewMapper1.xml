@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sxsram.ssm.mapper.SystemOverviewMapper">
+
+	<select id="queryTotalRecharges" parameterType="" resultType="Double">
+		select 
+			sum(operateNum)
+		from 
+			t_recharge_withdraw_record
+		where
+			operateType = 0
+	</select>
+	
+	<select id="queryTotalWithDraws" parameterType="" resultType="">
+		select 
+			sum(operateNum)
+		from 
+			t_recharge_withdraw_record
+		where
+			operateType = 1
+	</select>
+	
+	<select id="queryTotalRechargesWithToday" parameterType="" resultType="">
+		select 
+			sum(operateNum)
+		from 
+			t_recharge_withdraw_record
+		where
+			operateType = 0 and  DateDiff(operateTime,now())=0
+	</select>
+	
+	<select id="queryTotalWithDrawsWithToday" parameterType="" resultType="">
+		select 
+			sum(operateNum)
+		from 
+			t_recharge_withdraw_record
+		where
+			operateType = 1 and  DateDiff(operateTime,now())=0
+	</select>
+	
+	
+	
+	
+	
+	<select id="queryTotalIncomings" parameterType="" resultType="double">
+		select 
+			sum(amount * premiumRates / 100)
+		from 
+			t_journal_book
+		where
+			flag = 2
+	</select>
+	
+	<select id="queryTotalOutgoings" parameterType="" resultType="double">
+		
+	</select>
+	
+	<select id="queryTotalIncomingsWithToday" parameterType="" resultType="double">
+		select 
+			sum(amount * premiumRates / 100)
+		from 
+			t_journal_book
+		where
+			flag = 2  and  DateDiff(operateTime,now())=0
+	</select>
+	
+	<select id="queryTotalOutgoingsWithToday" parameterType="" resultType="double">	
+		
+	</select>
+		
+	<select id="queryTotalPlatformDlbs" parameterType="" resultType="double">
+		select
+			sum(accountBalance)
+		from
+			t_dlb_account
+		where
+			id != 1 and accountBalance is not null
+	</select>
+</mapper>
